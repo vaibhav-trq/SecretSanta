@@ -1,6 +1,12 @@
 # Compiled HTML
 *.html
 
-# Compiled JS
-*.js
-*.js.map
+# Compiled JavaScript files
+**/*.js
+**/*.js.map
+
+# Except the ESLint config file
+!.eslintrc.js
+
+# TypeScript v1 declaration files
+typings/
