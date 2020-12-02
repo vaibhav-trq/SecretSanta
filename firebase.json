@@ -14,10 +14,10 @@
   },
   "hosting": {
     "predeploy": [
-      "npm --prefix \"$RESOURCE_DIR\" install",
-      "npm --prefix \"$RESOURCE_DIR\" run build"
+      "npm --prefix \"$RESOURCE_DIR/..\" install",
+      "npm --prefix \"$RESOURCE_DIR/..\" run build"
     ],
-    "public": "public",
+    "public": "public/dst",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -27,6 +27,35 @@
       {
         "source": "**",
         "destination": "/dst/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=7200"
+          }
+        ]
+      },
+      {
+        "source": "404.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=300"
+          }
+        ]
       }
     ]
   },
