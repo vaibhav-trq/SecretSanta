@@ -13,7 +13,11 @@
     ]
   },
   "hosting": {
-    "public": "public",
+    "predeploy": [
+      "npm --prefix \"$RESOURCE_DIR/..\" install",
+      "npm --prefix \"$RESOURCE_DIR/..\" run build"
+    ],
+    "public": "public/dst",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -22,7 +26,36 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/dst/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.js",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(jpg|jpeg|gif|png)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=7200"
+          }
+        ]
       }
     ]
   },
