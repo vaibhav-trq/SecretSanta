@@ -5,6 +5,9 @@
 **/*.js
 **/*.js.map
 
+# Compiled CSS files
+**/*.css
+
 # Except the ESLint config file
 !.eslintrc.js
 
