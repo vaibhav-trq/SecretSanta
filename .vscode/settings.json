@@ -1,0 +1,5 @@
+{
+    "terminal.integrated.env.osx": {
+        "PATH": "${env:PATH}:./node_modules/.bin"
+    }
+}
