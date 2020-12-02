@@ -14,10 +14,10 @@
   },
   "hosting": {
     "predeploy": [
-      "npm run lint",
-      "npm run build"
+      "npm --prefix \"$RESOURCE_DIR\" run lint",
+      "npm --prefix \"$RESOURCE_DIR\" run build"
     ],
-    "public": "public/dst",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -26,7 +26,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "/index.html"
+        "destination": "/dst/index.html"
       }
     ]
   },
