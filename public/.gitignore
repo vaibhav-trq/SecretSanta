@@ -1,0 +1,6 @@
+# Compiled HTML
+*.html
+
+# Compiled JS
+*.js
+*.js.map

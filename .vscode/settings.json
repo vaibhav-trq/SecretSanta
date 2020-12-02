@@ -1,5 +1,5 @@
 {
-    "terminal.integrated.env.osx": {
-        "PATH": "${env:PATH}:./node_modules/.bin"
-    }
+    "terminal.integrated.env.osx": {},
+    "editor.tabSize": 2,
+    "editor.formatOnSave": true
 }
