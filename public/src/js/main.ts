@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
   // // The Firebase SDK is initialized and available here!
   //
+  await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
   firebase.auth().onAuthStateChanged(HandleAuth);
   // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
   // firebase.firestore().doc('/foo/bar').get().then(() => { });

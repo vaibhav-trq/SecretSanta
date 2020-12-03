@@ -1,4 +1,5 @@
-@color: #eceff1A0;
+@color: #eceff1D0;
+@opaque-color: #eceff1F0;
 
 html {
   height: 100%;
@@ -26,4 +27,29 @@ body>div {
 
 #menu-buttons {
   right: 0;
+}
+
+#profile {
+  .info {
+    font-weight: bold;
+  }
+}
+
+.input-badge {
+  position: relative;
+
+  input:not(:first-child) {
+    padding-right: 60px;
+  }
+
+  .badge {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+  }
+}
+
+.profile-close {
+  top: 10px;
+  right: 10px;
 }

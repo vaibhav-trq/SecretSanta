@@ -33,11 +33,16 @@ html
     // Firebase Auth UI.
     script(src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js")
     link(type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css")
+
+    // Intl-tel-input.
+    link(type="text/css" rel="stylesheet" href="/libs/intl-tel-input/css/intlTelInput.css")
+    script(src="/libs/intl-tel-input/js/intlTelInput.js")
   
   body
-    .container
-      .row.h-100
-        #content.mx-auto.my-auto.filter
+    .container.my-auto
+      .h-100
+        #content.mx-auto.filter.row
+      #recaptcha-container
     #menu-buttons.sticky-top.position-absolute
     include login
     include home
