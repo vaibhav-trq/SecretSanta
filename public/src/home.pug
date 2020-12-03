@@ -5,7 +5,7 @@ mixin profile(profile)
     form#profile-form
       .form-row.text-center
         .form-group.col-6.col-sm-4.col-md-3.mx-auto
-            img(src="{{user.photoURL}}{{^photoURL}}assets/santa-hat.svg{{/photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
+            img(src="{{user.photoURL}}{{^photoURL}}https://firebasestorage.googleapis.com/v0/b/secret-santa-covid.appspot.com/o/santa-hat.svg?alt=media&token=9e0c6091-d3ce-47cb-8cc7-4b16adacffbd{{/photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
       .form-row
         .form-group.col-md-12
             +formInput('displayName', 'First Last', '{{user.displayName}}')
