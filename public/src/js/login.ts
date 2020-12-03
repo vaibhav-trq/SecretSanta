@@ -1,5 +1,7 @@
+/* global grecaptcha */
 const { firebase, firebaseui } = window;
 import { SwapContent, AddMessage, GetErrorMessage } from './common.js'
+import { LoadUserData, UpdateAddressData, UpdateTextNotification } from './database.js';
 
 interface intlTelInput {
   setNumber(number: string): void;
@@ -24,6 +26,7 @@ class LoginManager {
     this.uiConfig = {
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.PhoneAuthProvider.PROVIDER_ID,
       ],
       signInFlow: 'popup',
       popupMode: true,
@@ -66,13 +69,14 @@ class LoginManager {
   };
 
   public async getPhoneCredential(phoneNumber: string): Promise<firebase.default.auth.PhoneAuthCredential> {
+    // Not present in emulator.
     const widgetId = await LoginManager.recaptchaVerifier.render();
-    grecaptcha.reset(widgetId);
+    grecaptcha?.reset(widgetId);
 
     const confResult = await
       firebase.auth().signInWithPhoneNumber(phoneNumber, LoginManager.recaptchaVerifier);
     const code = prompt("Verification Code", '') || '';
-    return firebase.auth.PhoneAuthProvider.credential(confResult!.verificationId, code);
+    return firebase.auth.PhoneAuthProvider.credential(confResult.verificationId, code);
   }
 };
 
@@ -113,7 +117,7 @@ const UpdateUserNumber = async (element: JQuery<HTMLElement>, user: firebase.def
 const UpdateUser = async (element: JQuery<HTMLElement>) => {
   const user = firebase.auth().currentUser!;
   const attr = element.attr('name')!;
-  let value = element.val()?.toString() || '';
+  const value = element.val()?.toString() || '';
   const orig = GetOriginalValue(attr, user);
   if (orig === value) {
     return;
@@ -133,14 +137,18 @@ const UpdateUser = async (element: JQuery<HTMLElement>) => {
 
 const ShowProfile = async () => {
   const user = firebase.auth().currentUser!;
-  SwapContent('profile', user.toJSON());
+  const userData = await LoadUserData();
+  SwapContent('profile', { user: user.toJSON(), address: userData.address, settings: userData.settings });
   if (user.phoneNumber) {
     $('#notifications').removeAttr('disabled');
+    if (userData.settings?.text_notifications) {
+      $('#notifications').prop("checked", true);
+    }
   }
 
   // @ts-expect-error: 2693
   profileNumberField = intlTelInput(document.querySelector('#profile [name="number"]'), {
-    'utilsScript': '/libs/intl-tel-input/js/utils.js'
+    'utilsScript': '/libs/intl-tel-input/js/utils.js',
   });
   profileNumberField?.setNumber(user.phoneNumber || '');
 
@@ -155,13 +163,22 @@ const ShowProfile = async () => {
     }
   }
 
-  $('#profile input:not([readonly])').on('keypress', async (e) => {
+  $('#notifications').on('change', async (e) => {
+    await UpdateTextNotification($(e.target));
+  });
+  $('#profile-form input:not([readonly])').on('keypress', async (e) => {
     if (e.key === "Enter") {
       await UpdateUser($(e.target));
     }
   });
-  $('.profile-close').on('click', () => {
-    ShowHomePage();
+  $('#address-form input:not([readonly])').on('keypress', async (e) => {
+    if (e.key === "Enter") {
+      await UpdateAddressData($(e.target));
+    }
+  });
+
+  $('.profile-close').on('click', async () => {
+    await ShowHomePage();
   });
 }
 
@@ -169,8 +186,8 @@ const ShowHomePage = async () => {
   const user = firebase.auth().currentUser!;
   SwapContent('home', user.toJSON());
 
-  $('#profileButton').on('click', () => {
-    ShowProfile();
+  $('#profileButton').on('click', async () => {
+    await ShowProfile();
   });
 
   $('#logoutButton').on('click', () => {
