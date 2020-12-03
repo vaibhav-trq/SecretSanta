@@ -5,7 +5,7 @@ mixin profile(profile)
     form#profile-form
       .form-row.text-center
         .form-group.col-6.col-sm-4.col-md-3.mx-auto
-            img(src="{{user.photoURL}}{{^photoURL}}/assets/santa-hat.svg{{/photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
+            img(src="{{user.photoURL}}{{^photoURL}}assets/santa-hat.svg{{/photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
       .form-row
         .form-group.col-md-12
             +formInput('displayName', 'First Last', '{{user.displayName}}')
