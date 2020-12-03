@@ -93,11 +93,14 @@ const UpdateUserNumber = async (element: JQuery<HTMLElement>, user: firebase.def
   try {
     if (!number) {
       await user.unlink(firebase.auth.PhoneAuthProvider.PROVIDER_ID);
+      $('#notifications').prop("checked", false);
+      $('#notifications').attr('disabled', '');
       return AddMessage(element, 'Phone number removed.', true);
     } else {
       const loginManager = new LoginManager();
       const authCred = await loginManager.getPhoneCredential(profileNumberField!.getNumber());
       await user.updatePhoneNumber(authCred);
+      $('#notifications').removeAttr('disabled');
       AddMessage(element, 'Phone number updated.', true);
     }
   } catch (e) {
