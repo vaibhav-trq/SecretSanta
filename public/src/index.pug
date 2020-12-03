@@ -16,18 +16,22 @@ html
     script(defer='' src='/__/firebase/8.1.1/firebase-analytics.js')
     script(defer='' src='/__/firebase/8.1.1/firebase-remote-config.js')
     script(defer='' src='/__/firebase/8.1.1/firebase-performance.js')
-    //
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    script(defer='' src='/__/firebase/init.js?useEmulator=true')
-    link(rel='stylesheet' href='/css/style.css' media='screen')
+    link(type="text/css" rel='stylesheet' href='/css/style.css' media='screen')
+
+    script(src="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.js")
+    link(type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.6.1/firebase-ui-auth.css")
 
   body
     #message
       h2 Welcome
       h1 Initial Firebase Changes!
-      p
-        | You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!
-      a(target='_blank' href='https://firebase.google.com/docs/hosting/') Open Hosting Documentation
     p#load Firebase SDK Loading…
+    #firebaseui-auth-container
+    
+    script.
+      var exports = {};
+    //
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    script(defer='' src='/__/firebase/init.js?useEmulator=true')
     script(type="module" src="/js/main.js")

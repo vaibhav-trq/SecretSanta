@@ -1,11 +1,15 @@
 const { firebase } = window;
+import { CreateLogInUI } from './login.js'
 
-document.addEventListener('DOMContentLoaded', function () {
+
+document.addEventListener('DOMContentLoaded', async () => {
   const loadEl = document.querySelector('#load')!;
   // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
   // // The Firebase SDK is initialized and available here!
   //
-  // firebase.auth().onAuthStateChanged(user => { });
+  firebase.auth().onAuthStateChanged(user => {
+    console.log("And we have a login: ", user);
+  });
   // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
   // firebase.firestore().doc('/foo/bar').get().then(() => { });
   // firebase.functions().httpsCallable('yourFunction')().then(() => { });
@@ -33,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return typeof app[feature] === 'function';
     });
     loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+    await CreateLogInUI();
   } catch (e) {
     console.error(e);
     loadEl.textContent = 'Error loading the Firebase SDK, check the console.';

@@ -1,15 +1,15 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "outDir": "dst/js",
         "sourceMap": true,
         "strict": true,
-        "target": "es2017"
+        "target": "ES6",
+        "moduleResolution": "Node",
     },
     "compileOnSave": true,
     "include": [
-        "src/js"
-    ]
+        "./src/js/*"
+    ],
 }
