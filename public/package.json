@@ -4,20 +4,24 @@
   "description": "",
   "scripts": {
     "lint": "eslint \"src/js/**/*\"",
-    "build": "tsc && pug ./src/index.pug --out ./dst/ && lessc ./src/css/style.less ./dst/css/style.css"
+    "build": "tsc && pug ./src/index.pug --out ./dst/"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^3.9.1",
     "@typescript-eslint/parser": "^3.8.0",
     "eslint": "^7.6.0",
     "eslint-plugin-import": "^2.22.0",
-    "less": "^3.12.2",
     "pug-cli": "^1.0.0-alpha6",
-    "typescript": "^3.8.0"
+    "typescript": "^3.8.0",
+    "@types/firebase": "^3.2.1",
+    "@types/jquery": "^3.5.4",
+    "@types/mustache": "^4.0.1",
+    "firebaseui": "^4.7.1"
   },
   "dependencies": {
-    "firebase": "^8.1.1"
+    "@types/grecaptcha": "^3.0.1"
   }
 }

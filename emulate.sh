@@ -12,4 +12,4 @@ npm --prefix functions run lint
 npm --prefix functions run build
 
 # Start emulator.
-firebase emulators:start
+firebase emulators:start --only hosting

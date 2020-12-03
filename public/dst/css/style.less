@@ -1,0 +1,55 @@
+@color: #eceff1D0;
+@opaque-color: #eceff1F0;
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+
+  background-image: url("https://www.flaticon.com/svg/static/icons/svg/621/621873.svg");
+  background-repeat: repeat;
+  background-size: 75px;
+
+  color: rgba(0, 0, 0, 0.87);
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+body>div {
+  flex: 1;
+}
+
+.filter {
+  background-color: @color;
+}
+
+#menu-buttons {
+  right: 0;
+}
+
+#profile {
+  .info {
+    font-weight: bold;
+  }
+}
+
+.input-badge {
+  position: relative;
+
+  input:not(:first-child) {
+    padding-right: 60px;
+  }
+
+  .badge {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+  }
+}
+
+.profile-close {
+  top: 10px;
+  right: 10px;
+}
