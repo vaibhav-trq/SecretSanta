@@ -1,0 +1,13 @@
+include common
+
+template#home-content
+  .row.text-center
+    .col-12.p-3
+      | {{uid}}
+    .col-12.p-3
+      | {{phoneNumber}}
+  .clearfix
+
+template#home-menu-buttons
+  +menu_button('logoutButton', 'Logout')
+  +menu_button('profileButton', 'Profile')
