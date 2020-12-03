@@ -67,7 +67,7 @@ export const HumanReadableDate = (comparisonDate: string): String => {
     fuzzy = 'a minute ago'
   } else if (delta < hour) {
     fuzzy = Math.floor(delta / minute) + ' minutes ago';
-  } else if (Math.floor(delta / hour) == 1) {
+  } else if (Math.floor(delta / hour) === 1) {
     fuzzy = '1 hour ago'
   } else if (delta < day) {
     fuzzy = Math.floor(delta / hour) + ' hours ago';
