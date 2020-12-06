@@ -1,14 +1,14 @@
 const { Mustache } = window;
 
 export const SwapContent = (src: String, data?: Object) => {
-  RenderTemplate(`${src}-content`, '#content', data);
-  RenderTemplate(`${src}-menu-buttons`, '#menu-buttons');
+  RenderTemplate(`${src}-content`, $('#content'), data);
+  RenderTemplate(`${src}-menu-buttons`, $('#menu-buttons'));
 };
 
-export const RenderTemplate = (src: String, dst: String, data?: Object) => {
+export const RenderTemplate = (src: String, dst: JQuery<HTMLElement>, data?: Object) => {
   const template = $(`template#${src}`).html();
   const rendered = Mustache.render(template, data);
-  $(dst).html(rendered);
+  dst.html(rendered);
 };
 
 export const AppendTemplate = (src: String, dst: String, data?: Object) => {
@@ -46,9 +46,8 @@ export const AddMessage = (element: JQuery<HTMLElement>, message: string, succes
   msg.insertAfter(element.parent()).delay(success ? 1000 : 5000).queue(() => msg.remove());
 }
 
-export const HumanReadableDate = (comparisonDate: string): String => {
+export const HumanReadableDate = (d: Date): String => {
   const today = new Date();
-  const d = new Date(parseInt(comparisonDate));
 
   // Make a fuzzy time
   const delta = Math.round((today.getTime() - d.getTime()) / 1000);
