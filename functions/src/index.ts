@@ -18,6 +18,8 @@ interface IAddress {
   zip: string,
 };
 interface ISettings {
+  phone: string | null,
+  email: string | null,
   text_notifications: string | null,
 };
 
@@ -31,20 +33,27 @@ const createAddress = (): IAddress => {
   }
 }
 
-const createSettings = (): ISettings => {
-  return {
-    text_notifications: null,
-  };
+class Settings implements ISettings {
+  phone: string | null;
+  email: string | null;
+  text_notifications: string | null;
+
+  constructor(verified: boolean, phone?: string, email?: string) {
+    this.phone = phone || null;
+    this.email = verified ? email! : null;
+    this.text_notifications = null;
+  }
 }
 
-exports.addToDB = functions.auth.user().onCreate(async (user, context) => {
+exports.createUser = functions.auth.user().onCreate(async (user, context) => {
   return admin.database().ref('/users/' + user.uid).set({
+    displayName: user.displayName,
     address: createAddress(),
-    settings: createSettings(),
+    settings: new Settings(user.emailVerified, user.phoneNumber, user.email),
   });
 });
 
-exports.removeFromDB = functions.auth.user().onDelete((user, context) => {
+exports.removeUser = functions.auth.user().onDelete((user, context) => {
   functions.logger.info("Users deleted!", { structuredData: true });
   return admin.database().ref('/users/' + user.uid).remove();
 });

@@ -2,12 +2,14 @@
 const { firebase, firebaseui } = window;
 import { SwapContent, AddMessage, GetErrorMessage } from './common.js'
 import { LoadUserData, UpdateAddressData, UpdateTextNotification } from './database.js';
+import { EventManager } from './event.js';
 
 interface intlTelInput {
   setNumber(number: string): void;
   getNumber(): string;
 };
 let profileNumberField: intlTelInput | null = null;
+let eventManager: EventManager | null = null;
 
 class LoginManager {
   static ui: firebaseui.auth.AuthUI;
@@ -185,12 +187,19 @@ const ShowProfile = async () => {
 const ShowHomePage = async () => {
   const user = firebase.auth().currentUser!;
   SwapContent('home', user.toJSON());
+  eventManager = new EventManager($('#events'));
 
   $('#profileButton').on('click', async () => {
+    eventManager?.terminate();
     await ShowProfile();
   });
 
+  $('#createEvent').on('click', async () => {
+    await eventManager?.createHostedEvent();
+  });
+
   $('#logoutButton').on('click', () => {
+    eventManager?.terminate();
     return firebase.auth().signOut();
   });
 };

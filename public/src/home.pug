@@ -41,12 +41,22 @@ template#profile-content
     +profile()
 
 template#home-content
-  | You've logged in!
+  #events.card-deck.m-4.d-flex.justify-content-center
+
+template#event
+  .card
+    .card-body
+      h5.card-title {{name}}
+      p.card-text {{host}}
+      p.card-text {{participants.length}} Santa Helpers
+      p.card-text
+        small.text-muted Last updated {{formatted_updated_date}}
 
 
 template#profile-menu-buttons
   +menu_button('logoutButton', 'Logout')
 
 template#home-menu-buttons
+  +menu_button('createEvent', 'Host Event')
   +menu_button('profileButton', 'Profile')
   +menu_button('logoutButton', 'Logout')
