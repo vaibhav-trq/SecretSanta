@@ -272,45 +272,23 @@ const ShowMatch = async () => {
 
 }
 
-const ShowHostEvent = async () => {
-  const user = firebase.auth().currentUser!;
-  const userData = await LoadUserData();
-  SwapContent('hostEvent', { user: user.toJSON(), address: userData.address, settings: userData.settings });
-
-  $('#homeButton').on('click', async () => {
-    await ShowHomePage();
-  });
-
-  $('#profileButton').on('click', async () => {
-    await ShowProfile();
-  });
-
-  $('#logoutButton').on('click', () => {
-    return firebase.auth().signOut();
-  });
-
-}
-
 const ShowHomePage = async () => {
   const user = firebase.auth().currentUser!;
   SwapContent('home', user.toJSON());
   eventManager = new EventManager($('#events'));
+
+  $('#eventCard').on('click', async () => {
+    console.log("got the right id")
+    await ShowMatch();
+  })
 
   $('#profileButton').on('click', async () => {
     eventManager?.terminate();
     await ShowProfile();
   });
 
-  $('#createEvent').on('click', async () => {
-    await eventManager?.createHostedEvent();
-  });
-
-  $('#eventButton').on('click', async () => {
-    await ShowMatch();
-  });
-
   $('#hostEventButton').on('click', async () => {
-    await ShowHostEvent();
+    await eventManager?.createHostedEvent();
   });
 
   $('#logoutButton').on('click', () => {

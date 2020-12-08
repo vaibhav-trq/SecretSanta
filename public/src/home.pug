@@ -94,17 +94,15 @@ mixin eventRSVP(eventDetails)
     div.drawButton
       +chat_button('drawNamesButton', 'Draw Names')
 
-mixin hostEvent()
-  | Enter details to host an event
+//- mixin hostEvent()
+//-   | Enter details to host an event
 
-mixin eventModal(eventDetails)
-  +event_modal('eventButton', eventDetails + '\n date' + '\n host')
+//- mixin eventModal(eventDetails)
+//-   +event_modal('eventButton', eventDetails + '\n date' + '\n host')
 
 mixin createNewEventModal()
  +event_modal('hostEventButton', 'Host New Event')
 
-template#hostEvent-content
-  +hostEvent()
 
 template#match-content
   div.match-container
@@ -135,23 +133,20 @@ template#match-profile-content
 
 template#home-content
   div.homeContainer
-  +createNewEventModal()
-  .m-4.d-flex.justify-content-center
-    #events.card-deck
+    .m-4.d-flex.justify-content-center
+      #events.card-deck
+    +createNewEventModal()
 
 template#event
-  .card
+  .card.event-modal#eventCard
     .card-body
-      h5.card-title {{name}}
-      p.card-text {{host}}
-      p.card-text {{participants.length}} Santa Helpers
+      h8.card-title {{name}}
+      h3.card-title.secondary-font 25 <br/> December
+      p.card-text Hosted by: <br/> {{host}}
+
+      p.card-text.secondary-font {{participants.length}} Santa Helpers
       p.card-text
         small.text-muted Last updated {{formatted_updated_date}}
-
-template#hostEvent-menu-buttons
-  +menu_button('profileButton', 'My Profile')
-  +menu_button('homeButton', 'Go Home')
-  +menu_button('logoutButton', 'Logout')
 
 template#match-menu-buttons
   +menu_button('profileButton', 'My Profile')
@@ -167,6 +162,5 @@ template#profile-menu-buttons
   +menu_button('logoutButton', 'Logout')
 
 template#home-menu-buttons
-  +menu_button('createEvent', 'Host Event')
   +menu_button('profileButton', 'My Profile')
   +menu_button('logoutButton', 'Logout')
