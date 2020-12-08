@@ -5,6 +5,7 @@ import { IUserAddress, IUserSettings, LoadUserData } from '../models/users.js';
 import { NavigationButtons, PageTypes } from "../models/nav.js";
 import { GetErrorMessage } from "../common.js";
 import { IPageManagerInternal } from "../models/page_manager.js";
+import { intlTelInput } from "../models/intlTelInput.js";
 
 interface IProfileRenderData extends IRenderData {
   user: Object,
@@ -28,11 +29,6 @@ const AddMessage = (element: JQuery<HTMLElement>, message: string, success: bool
   msg.addClass(success ? 'text-success' : 'text-danger');
   msg.insertAfter(element.parent()).delay(success ? 1000 : 5000).queue(() => msg.remove());
 }
-
-interface intlTelInput {
-  setNumber(number: string): void;
-  getNumber(): string;
-};
 
 export class ProfilePage extends Page {
   protected readonly prefix_ = PageTypes.PROFILE;
@@ -64,7 +60,7 @@ export class ProfilePage extends Page {
     }
 
     // @ts-expect-error: 2693
-    this.numberField_ = intlTelInput(document.querySelector('#profile [name="number"]'), {
+    this.numberField_ = intlTelInput(document.querySelector(`#${this.prefix_} [name="number"]`), {
       'utilsScript': '/libs/intl-tel-input/js/utils.js',
     });
     this.numberField_!.setNumber(user.phoneNumber || '');

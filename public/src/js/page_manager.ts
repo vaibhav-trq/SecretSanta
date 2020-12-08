@@ -4,9 +4,11 @@ import { Page } from "./models/page.js";
 import { HomePage } from "./pages/home.js";
 import { LoginPage } from "./pages/login.js";
 import { ProfilePage } from "./pages/profile.js";
-import { NavigationButtons, PageTypes } from "./models/nav.js";
+import { ButtonToPage, NavigationButtons, PageTypes } from "./models/nav.js";
 import { IPageManager, IPageManagerInternal } from "./models/page_manager.js";
 import { Logger } from "./models/logger.js";
+import { MatchProfilePage } from "./pages/match_profile.js";
+import { EventDetailsPage, MatchPage } from "./pages/match.js";
 
 
 /**
@@ -16,7 +18,6 @@ import { Logger } from "./models/logger.js";
  */
 export class PageManager extends Logger implements IPageManager, IPageManagerInternal {
   private readonly pages_: Map<PageTypes, Page>;
-  private readonly nav_buttons_: Map<NavigationButtons, PageTypes>;
   private readonly recaptchaVerifier_: firebase.default.auth.RecaptchaVerifier;
   private history_: PageTypes[] = [];
 
@@ -25,13 +26,9 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
     this.recaptchaVerifier_ = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
     });
-    this.pages_ = new Map([PageTypes.HOME, PageTypes.PROFILE, PageTypes.LOGIN].map(k => {
+    this.pages_ = new Map(Object.values(PageTypes).map(k => {
       return [k, this.createPageInstance(k)];
     }));
-    this.nav_buttons_ = new Map([
-      [NavigationButtons.HOME, PageTypes.HOME],
-      [NavigationButtons.PROFILE, PageTypes.PROFILE],
-    ])
     this.registerButtons();
   }
 
@@ -43,6 +40,12 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
         return new LoginPage(this);
       case PageTypes.PROFILE:
         return new ProfilePage(this, this.recaptchaVerifier_);
+      case PageTypes.MATCH_PROFILE:
+        return new MatchProfilePage(this);
+      case PageTypes.MATCH:
+        return new MatchPage(this);
+      case PageTypes.EVENT_DETAILS:
+        return new EventDetailsPage(this);
       default:
         throw new Error(`Unsupported PageType: ${page}`);
     }
@@ -65,10 +68,11 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
   }
 
   private registerButtons() {
-    this.nav_buttons_.forEach((page, button) => {
+    ButtonToPage.forEach((page, button) => {
       $(`#${button}-button`).on('click', async () => {
         await this.swapPage(page);
       });
+      this.LOG("Registered:", button, "=>", page);
     });
     $(`#${NavigationButtons.LOGOUT}-button`).on('click', async () => {
       await firebase.auth().signOut();

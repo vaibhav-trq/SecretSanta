@@ -9,7 +9,7 @@ import { IPageManagerInternal } from "../models/page_manager.js";
 interface IHomePageRenderData extends IRenderData, Object { };
 
 export class HomePage extends Page {
-  protected readonly buttons_ = new Set([NavigationButtons.PROFILE, NavigationButtons.LOGOUT]);
+  protected readonly buttons_ = new Set(Object.values(NavigationButtons));
   protected readonly prefix_ = PageTypes.HOME;
   private readonly eventRef_ = firebase.database().ref('/events');
 
