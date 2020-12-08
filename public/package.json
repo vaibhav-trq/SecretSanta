@@ -19,9 +19,10 @@
     "@types/firebase": "^3.2.1",
     "@types/jquery": "^3.5.4",
     "@types/mustache": "^4.0.1",
+    "@types/grecaptcha": "^3.0.1",
+    "@types/less": "^3.0.2",
     "firebaseui": "^4.7.1"
   },
   "dependencies": {
-    "@types/grecaptcha": "^3.0.1"
   }
 }

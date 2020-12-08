@@ -67,3 +67,5 @@ node_modules/
 
 # emulator data
 data/*
+.runtimeconfig.json
+google_creds.json

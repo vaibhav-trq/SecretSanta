@@ -1,0 +1,14 @@
+
+template#home-content
+  .row
+    #events.card-deck.m-4.d-flex.justify-content-center
+      .card#createEvent Host Event
+
+template#event
+  .card
+    .card-body
+      h5.card-title {{name}}
+      p.card-text {{host}}
+      p.card-text {{participants.length}} Santa Helpers
+      p.card-text
+        small.text-muted Last updated {{formatted_updated_date}}
