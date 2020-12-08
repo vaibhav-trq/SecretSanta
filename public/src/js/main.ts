@@ -1,29 +1,26 @@
 const { firebase } = window;
-import { HandleAuth } from './login.js'
+import { PageManager } from './page_manager.js';
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // const loadEl = document.querySelector('#load');
-  // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-  // // The Firebase SDK is initialized and available here!
-  //
+  // Assure that authorization is persistent for sessions, not a single tab.
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
-  firebase.auth().onAuthStateChanged(HandleAuth);
-  // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-  // firebase.firestore().doc('/foo/bar').get().then(() => { });
-  // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-  // firebase.messaging().requestPermission().then(() => { });
-  // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-  // firebase.analytics(); // call to activate
-  // firebase.analytics().logEvent('tutorial_completed');
-  // firebase.performance(); // call to activate
-  //
-  // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-  // try {
-  //   // const app = firebase.app();
-  //   // await CreateLogInUI();
-  // } catch (e) {
-  //   console.error(e);
-  //   // loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-  // }
+
+  // Create page manager.
+  const manager = new PageManager();
+
+  // Main entry point is based on firebase auth.
+  firebase.auth().onAuthStateChanged(async user => {
+    if (user) {
+      // Some user is logged in.
+      await manager.onLogin();
+    } else {
+      // No user is logged in.
+      await manager.onLogout();
+    }
+  });
+});
+
+$(window).on('load', () => {
+  less.watch();
 });

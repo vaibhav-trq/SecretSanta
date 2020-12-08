@@ -8,13 +8,13 @@ export const SwapContent = (src: String, data?: Object) => {
 export const RenderTemplate = (src: String, dst: JQuery<HTMLElement>, data?: Object) => {
   const template = $(`template#${src}`).html();
   const rendered = Mustache.render(template, data);
-  dst.html(rendered);
+  return dst.html(rendered);
 };
 
 export const AppendTemplate = (src: String, dst: String, data?: Object) => {
   const template = $(`template#${src}`).html();
   const rendered = Mustache.render(template, data);
-  $(dst).append(rendered);
+  return $(dst).append(rendered);
 };
 
 interface IException {
@@ -39,12 +39,6 @@ export const GetErrorMessage = (e: any): string => {
   }
   return 'Unexepected error!';
 };
-
-export const AddMessage = (element: JQuery<HTMLElement>, message: string, success: boolean = false) => {
-  const msg = $(`<h5><small class="font-weight-bold">${message}</small></h5>`);
-  msg.addClass(success ? 'text-success' : 'text-danger');
-  msg.insertAfter(element.parent()).delay(success ? 1000 : 5000).queue(() => msg.remove());
-}
 
 export const HumanReadableDate = (d: Date): String => {
   const today = new Date();
