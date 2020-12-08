@@ -184,6 +184,113 @@ const ShowProfile = async () => {
   });
 }
 
+const ShowMatchProfile = async () => {
+  const matchDiv = "#match-profile";
+
+  const user = firebase.auth().currentUser!;
+  const userData = await LoadUserData();
+  SwapContent('match-profile', { user: user.toJSON(), address: userData.address, settings: userData.settings });
+  if (user.phoneNumber) {
+    $('#notifications').removeAttr('disabled');
+    if (userData.settings?.text_notifications) {
+      $('#notifications').prop("checked", true);
+    }
+  }
+
+  // @ts-expect-error: 2693
+  profileNumberField = intlTelInput(document.querySelector(`${matchDiv} [name="number"]`), {
+    'utilsScript': '/libs/intl-tel-input/js/utils.js',
+  });
+  profileNumberField?.setNumber(user.phoneNumber || '');
+
+  if (user.email) {
+    const emailBadge = $(`${matchDiv} [name="email"]`).parent().find('.badge');
+    if (user.emailVerified) {
+      emailBadge.addClass('badge-success');
+      emailBadge.html('Verified');
+    } else {
+      emailBadge.addClass('badge-danger');
+      emailBadge.html('Unverified');
+    }
+  }
+
+  $('#notifications').on('change', async (e) => {
+    await UpdateTextNotification($(e.target));
+  });
+  $(`${matchDiv}-form input:not([readonly])`).on('keypress', async (e) => {
+    if (e.key === "Enter") {
+      await UpdateUser($(e.target));
+    }
+  });
+  $('#match-address-form input:not([readonly])').on('keypress', async (e) => {
+    if (e.key === "Enter") {
+      await UpdateAddressData($(e.target));
+    }
+  });
+
+  $('.profile-close').on('click', async () => {
+    console.log('Getting this to work?');
+    await ShowHomePage();
+  });
+}
+
+const ShowMatch = async () => {
+  const user = firebase.auth().currentUser!;
+  const userData = await LoadUserData();
+  SwapContent('match', { user: user.toJSON(), address: userData.address, settings: userData.settings });
+
+  $('#santaChatButton').on('click', async () => {
+    console.log("santa chat button pressed!")
+    await ShowHomePage();
+  });
+
+  $('#gifteeChatButton').on('click', async () => {
+    console.log("giftee chat button pressed!")
+    await ShowHomePage();
+  });
+
+  $('#drawNamesButton').on('click', async () => {
+    console.log("draw names button pressed!")
+    await ShowHomePage();
+  });
+
+  $('#matchProfileButton').on('click', async () => {
+    await ShowMatchProfile();
+  });
+
+  $('#homeButton').on('click', async () => {
+    await ShowHomePage();
+  });
+
+  $('#profileButton').on('click', async () => {
+    await ShowProfile();
+  });
+
+  $('#logoutButton').on('click', () => {
+    return firebase.auth().signOut();
+  });
+
+}
+
+const ShowHostEvent = async () => {
+  const user = firebase.auth().currentUser!;
+  const userData = await LoadUserData();
+  SwapContent('hostEvent', { user: user.toJSON(), address: userData.address, settings: userData.settings });
+
+  $('#homeButton').on('click', async () => {
+    await ShowHomePage();
+  });
+
+  $('#profileButton').on('click', async () => {
+    await ShowProfile();
+  });
+
+  $('#logoutButton').on('click', () => {
+    return firebase.auth().signOut();
+  });
+
+}
+
 const ShowHomePage = async () => {
   const user = firebase.auth().currentUser!;
   SwapContent('home', user.toJSON());
@@ -196,6 +303,14 @@ const ShowHomePage = async () => {
 
   $('#createEvent').on('click', async () => {
     await eventManager?.createHostedEvent();
+  });
+
+  $('#eventButton').on('click', async () => {
+    await ShowMatch();
+  });
+
+  $('#hostEventButton').on('click', async () => {
+    await ShowHostEvent();
   });
 
   $('#logoutButton').on('click', () => {
