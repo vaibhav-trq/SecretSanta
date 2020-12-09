@@ -1,0 +1,41 @@
+include ../common
+
+mixin profile()
+  #profile.p-4
+    form#profile-form
+      .form-row.text-center
+        .form-group.col-6.col-sm-4.col-md-3.mx-auto
+            img(src="{{user.photoURL}}{{^user.photoURL}}/assets/santa-hat.svg{{/user.photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
+      .form-row
+        .form-group.col-md-12
+            +formInput('displayName', 'First Last', '{{user.displayName}}')
+      .form-row.align-items-center
+        .form-group.col-md-6
+          +formInput('email', 'Email', '{{user.email}}', 'email')(readonly)
+            span.badge
+        .form-group.col-6.col-md-3
+          +formInput('number', 'Phone Number', '', 'tel')
+        .form-group.col-6.col-md-3
+          .form-check.form-check-inline
+            input#notifications.form-check-input(type='checkbox' value='notifications' disabled)
+            label.form-check-label(for='notifications') Text Notifications
+    div.border-top.my-2.row.border-dark
+    h3.text-center Address
+    form#address-form
+      .form-group
+        +formInput('street', '1234 Main St', '{{address.street}}')
+      .form-group
+        +formInput('street2', 'APT# 1234', '{{address.street2}}')
+      .form-row
+        .form-group.col-md-6
+          +formInput('city', 'City', '{{address.city}}')
+        .form-group.col-md-4
+          +formInput('state', 'State', '{{address.state}}')
+        .form-group.col-md-2
+          +formInput('zip', 'Zip Code', '{{address.street}}')(pattern="[0-9]*")
+
+template#profile-content
+  .col
+    button.position-absolute.close.profile-close(type='button' aria-label='Close')
+      span(aria-hidden='true') ×
+    +profile()

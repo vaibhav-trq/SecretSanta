@@ -1,0 +1,38 @@
+include ../common
+
+mixin eventModal(eventDetails)
+  +event_modal('eventButton', eventDetails + '\n date' + '\n host')
+
+mixin eventRSVP(eventDetails)
+  div.event-modal-large
+    div.title
+      h3 Who's RSVP'd?
+    div.tableContainer
+      div.leftTableContainer
+        h1.tableTitle naughty
+        h6 hasn't rsvp'd
+        div.names
+          p4 Stadia
+          p4 Calendar
+          p4 Gmail
+      div.rightTableContainer
+        h1.tableTitle nice
+        h6 already rsvp'd
+        div.names
+          p4 Stadia
+          p4 Gmail
+    div.drawButton
+      +chat_button('drawNamesButton', 'Draw Names')
+
+template#event-details-content
+  div.match-container
+    if doneDrawing
+      +matchDetails('MatchName')
+      div.img-container
+        img(src='/assets/santa-w-bag.svg', alt='santa')
+      div.button-container
+        +chat_button('matchProfileButton', 'See Match Profile')
+        +chat_button('gifteeChatButton', 'Chat w/ giftee')
+        +chat_button('santaChatButton', 'Chat w/ santa')
+    unless doneDrawing
+      +eventRSVP()
