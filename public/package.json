@@ -23,6 +23,5 @@
     "@types/less": "^3.0.2",
     "firebaseui": "^4.7.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }

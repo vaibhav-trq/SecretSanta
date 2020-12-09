@@ -15,26 +15,21 @@ body {
   background-color: @background;
   background-image: url("/assets/background.png");
   background-repeat: no-repeat;
-  background-size: fill;
+  background-attachment: fixed;
   color: @off-black;
-  font-family: 'Red Rose', cursive;
 }
 
 body>div {
   flex: 1;
+  font-family: 'Red Rose', cursive;
+
 }
 
 .filter {
   justify-content: center;
   padding: 20px;
   margin: 40px;
-}
 
-.homeContainer {
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  margin: 100px;
 }
 
 #nav-buttons {
@@ -43,26 +38,23 @@ body>div {
 
 .event-modal {
   background-color: @modal;
-  border-radius: 15%;
+  border-radius: 20%;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   color: @off-black;
-  white-space: nowrap;
-  margin: 15px;
+  text-align: center;
+  align-items: center;
 }
 
-.host-event-modal {
-  width: 200px;
-  background-color: @modal;
-  border-color: @modal;
-  border-radius: 15%;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  color: @off-black;
-  white-space: nowrap;
-  margin: 15px;
+.event-modal:hover {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75));
 }
 
 .secondary-font {
   color: @xmas-green;
+}
+
+.add-item {
+  font-size: 10rem;
 }
 
 .event-modal-large {
@@ -101,6 +93,7 @@ body>div {
   flex-direction: column;
   opacity: 0.44;
   padding: 5%;
+  height: 20vh;
 }
 
 .event-modal-large .tableContainer .rightTableContainer {

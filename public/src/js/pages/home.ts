@@ -29,13 +29,12 @@ export class HomePage extends Page {
       const eventDom = $('#events');
 
       // Clear the event dom.
-      eventDom.children().not(':first').remove();
+      eventDom.children().not(':last').remove();
 
-      // TODO: Events should be sorted by most recent first.
       snapshot.forEach(eventData => {
         const event = new Event(eventData.key!, eventData.val());
         // Draw each event dom.
-        eventDom.append(this.createEventDom(event));
+        eventDom.prepend(this.createEventDom(event));
       });
     });
 
@@ -51,7 +50,11 @@ export class HomePage extends Page {
   }
 
   private createEventDom(event: Event) {
-    return RenderTemplate('event', $('<div></div>'), event);
+    const ele = RenderTemplate('event', null, event);
+    ele.on('click', async () => {
+      await this.manager_.swapPage(PageTypes.MATCH);
+    });
+    return ele;
   }
 
   public async createHostedEvent() {

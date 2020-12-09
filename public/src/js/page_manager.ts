@@ -79,7 +79,7 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
     });
   }
 
-  private async swapPage(target: PageTypes) {
+  async swapPage(target: PageTypes) {
     this.LOG('Swapping to:', target);
     const next = this.pages_.get(target);
     if (!next) {

@@ -1,6 +1,11 @@
+import { PageTypes } from "./nav";
+
 export interface IPageManagerInternal {
   /** Returns to the previous page. */
   back(): Promise<void>;
+
+  /** Swaps to a different page. */
+  swapPage(name: PageTypes): Promise<void>;
 };
 
 export interface IPageManager {
