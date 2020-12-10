@@ -61,6 +61,12 @@ export class Event implements IEvent {
     }
   }
 
+  /** Human readable participant summary. */
+  public get participant_summary() {
+    const ext = (this.participants.length > 1 ? 's' : '');
+    return `${this.participants.length} Santa Helper${ext}`;
+  }
+
   /** Updated date in human readable format. */
   public get formatted_updated_date() {
     const d = new Date();
