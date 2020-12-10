@@ -1,14 +1,19 @@
 
 template#home-content
-  .row
-    #events.card-deck.m-4.d-flex.justify-content-center
-      .card#createEvent Host Event
+  #events.d-flex.flex-row.flex-wrap.justify-content-center.col-12
+    #createEvent.card.event-modal.col-4.m-2
+      .card-body
+        h1.card-title.add-item.secondary-font +
+        h5.card-title.secondary-font Host Event
+        p.card-text
+          small.text-muted Click to create a new event
 
 template#event
-  .card
+  .card.event-modal.col-4.m-2
     .card-body
-      h5.card-title {{name}}
-      p.card-text {{host}}
-      p.card-text {{participants.length}} Santa Helpers
+      h6.card-title {{name}}
+      h2.card-title.secondary-font 25 <br/> December
+      p.card-text Hosted by: <br/> {{host}}
+      p.card-text.secondary-font {{participants.length}} Santa Helpers
       p.card-text
         small.text-muted Last updated {{formatted_updated_date}}

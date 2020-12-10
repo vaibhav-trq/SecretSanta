@@ -1,0 +1,15 @@
+include ../common
+
+mixin matchDetails(matchName)
+  | Your match is {{matchName}}
+
+template#match-content
+  div.d-flex.flex-col.flex-wrap.justify-content-center.mt-5
+    div.text-center
+      +matchDetails('John Smith')
+    div.img-container
+      img(src='/assets/santa-w-bag.svg', alt='santa')
+    div.d-flex.flex-row.flex-wrap.justify-content-center.col-12
+      +chat_button('match-profile-button', 'See Match Profile')
+      +chat_button('gifteeChatButton', 'Chat w/ giftee')
+      +chat_button('santaChatButton', 'Chat w/ santa')

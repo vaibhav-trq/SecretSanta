@@ -1,0 +1,32 @@
+include ../common
+
+mixin eventRSVP(eventDetails)
+  div.event-modal-large.row.text-center.p-4
+    div.col-12
+      h1 December 25
+      h6 Secret Santa 2020
+    div.d-flex.flex-row.justify-content-around.col-12
+      div.leftTableContainer.d-flex.flex-column
+        h1.tableTitle.mb-0 naughty
+        h6 hasn't rsvp'd
+        div.names.d-flex.flex-column
+          p4 Stadia
+          p4 Calendar
+          p4 Gmail
+          p4 Drive
+          p4 Photos
+          p4 Classroom
+          p4 Maps
+          p4 Dogfood
+      div.rightTableContainer.d-flex.flex-column
+        h1.tableTitle.mb-0 nice
+        h6 already rsvp'd
+        div.names.d-flex.flex-column
+          p4 Stadia
+          p4 Gmail
+    div.col-12
+      +chat_button('drawNamesButton', 'Draw Names')
+
+template#event-details-content
+  div.d-flex.flex-col.flex-wrap.mt-2
+      +eventRSVP()

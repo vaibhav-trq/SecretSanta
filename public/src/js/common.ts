@@ -5,9 +5,12 @@ export const SwapContent = (src: String, data?: Object) => {
   RenderTemplate(`${src}-menu-buttons`, $('#menu-buttons'));
 };
 
-export const RenderTemplate = (src: String, dst: JQuery<HTMLElement>, data?: Object) => {
+export const RenderTemplate = (src: String, dst: JQuery<HTMLElement> | null, data?: Object) => {
   const template = $(`template#${src}`).html();
   const rendered = Mustache.render(template, data);
+  if (!dst) {
+    return $(rendered);
+  }
   return dst.html(rendered);
 };
 

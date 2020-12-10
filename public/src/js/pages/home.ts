@@ -9,7 +9,7 @@ import { IPageManagerInternal } from "../models/page_manager.js";
 interface IHomePageRenderData extends IRenderData, Object { };
 
 export class HomePage extends Page {
-  protected readonly buttons_ = new Set([NavigationButtons.PROFILE, NavigationButtons.LOGOUT]);
+  protected readonly buttons_ = new Set(Object.values(NavigationButtons));
   protected readonly prefix_ = PageTypes.HOME;
   private readonly eventRef_ = firebase.database().ref('/events');
 
@@ -29,13 +29,12 @@ export class HomePage extends Page {
       const eventDom = $('#events');
 
       // Clear the event dom.
-      eventDom.children().not(':first').remove();
+      eventDom.children().not(':last').remove();
 
-      // TODO: Events should be sorted by most recent first.
       snapshot.forEach(eventData => {
         const event = new Event(eventData.key!, eventData.val());
         // Draw each event dom.
-        eventDom.append(this.createEventDom(event));
+        eventDom.prepend(this.createEventDom(event));
       });
     });
 
@@ -51,7 +50,17 @@ export class HomePage extends Page {
   }
 
   private createEventDom(event: Event) {
-    return RenderTemplate('event', $('<div></div>'), event);
+    const ele = RenderTemplate('event', null, event);
+    var doneDrawing = false;
+    ele.on('click', async () => {
+      if (doneDrawing)
+        await this.manager_.swapPage(PageTypes.MATCH);
+      else
+        await this.manager_.swapPage(PageTypes.EVENT_DETAILS);
+
+
+    });
+    return ele;
   }
 
   public async createHostedEvent() {

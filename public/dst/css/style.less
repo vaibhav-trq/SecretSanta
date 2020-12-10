@@ -1,5 +1,6 @@
-@color: #eceff1D0;
-@opaque-color: #eceff1F0;
+@background: #e5e5e5;
+@modal: #ffffff;
+@off-black: rgba(0, 0, 0, 0.87);
 
 html {
   height: 100%;
@@ -8,31 +9,39 @@ html {
 body {
   height: 100%;
   display: flex;
-
-  background-image: url("https://www.flaticon.com/svg/static/icons/svg/621/621873.svg");
-  background-repeat: repeat;
-  background-size: 75px;
-
-  color: rgba(0, 0, 0, 0.87);
-  font-family: Roboto, Helvetica, Arial, sans-serif;
+  background-color: @background;
+  background-image: url("/assets/background.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: @off-black;
 }
 
 body>div {
   flex: 1;
+  font-family: 'Red Rose', cursive;
 }
 
 .filter {
-  background-color: @color;
+  justify-content: center;
+  padding: 20px;
+  margin: 40px;
 }
 
 #nav-buttons {
   right: 0;
 }
 
-#profile {
-  .info {
-    font-weight: bold;
-  }
+.event-modal {
+  background-color: @modal;
+  border-radius: 20%;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  color: @off-black;
+  text-align: center;
+  align-items: center;
+}
+
+.event-modal:hover {
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.75));
 }
 
 .input-badge {
@@ -47,9 +56,4 @@ body>div {
     top: 10px;
     right: 5px;
   }
-}
-
-.profile-close {
-  top: 10px;
-  right: 10px;
 }

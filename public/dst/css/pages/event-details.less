@@ -1,0 +1,38 @@
+@modal: #ffffff;
+@xmas-red: #DF1F00;
+@xmas-green: #20AB58;
+
+.event-modal-large {
+  background-color: @modal;
+  border-color: @modal;
+  width: 400px;
+  height: 400px;
+  border-radius: 10%;
+  text-align: center;
+  font-weight: 500;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.tableTitle {
+  font-weight: 600;
+}
+
+.event-modal-large .leftTableContainer {
+  color: @xmas-red;
+}
+
+.event-modal-large .leftTableContainer .names {
+  opacity: 0.44;
+  height: 20vh;
+  overflow-y: scroll;
+}
+
+.event-modal-large .rightTableContainer {
+  color: @xmas-green;
+}
+
+.event-modal-large .rightTableContainer .names {
+  opacity: .44;
+  height: 20vh;
+  overflow-y: scroll;
+}
