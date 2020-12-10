@@ -51,14 +51,18 @@ export class HomePage extends Page {
 
   private createEventDom(event: Event) {
     const ele = RenderTemplate('event', null, event);
+    const user = firebase.auth().currentUser!;
+    if (event.host === user.uid) {
+      ele.append('<div class="ribbon ribbon-top-right"><span>Host</span></div>')
+    }
+
     var doneDrawing = false;
     ele.on('click', async () => {
-      if (doneDrawing)
+      if (doneDrawing) {
         await this.manager_.swapPage(PageTypes.MATCH);
-      else
+      } else {
         await this.manager_.swapPage(PageTypes.EVENT_DETAILS);
-
-
+      }
     });
     return ele;
   }
