@@ -24,6 +24,6 @@ HOSTING_TS_PID=$!
 npm --prefix public run watch_pug &
 HOSTING_PUG_PID=$!
 
-read  -n 1 -p "Press Enter to Stop:" mainmenuinput
-
 trap 'kill $(jobs -p) && wait && echo Successfully exited' SIGINT SIGTERM EXIT
+
+read  -n 1 -p "Press Enter to Stop:" mainmenuinput
