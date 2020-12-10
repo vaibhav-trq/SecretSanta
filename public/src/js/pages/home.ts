@@ -51,8 +51,14 @@ export class HomePage extends Page {
 
   private createEventDom(event: Event) {
     const ele = RenderTemplate('event', null, event);
+    var doneDrawing = true;
     ele.on('click', async () => {
-      await this.manager_.swapPage(PageTypes.MATCH);
+      if (doneDrawing)
+        await this.manager_.swapPage(PageTypes.MATCH);
+      else
+        await this.manager_.swapPage(PageTypes.EVENT_DETAILS);
+
+
     });
     return ele;
   }
