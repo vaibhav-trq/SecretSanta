@@ -1,3 +1,4 @@
+const { firebase } = window;
 import { HumanReadableDate } from "../common.js";
 
 /** A secret santa event object. */
@@ -69,8 +70,12 @@ export class Event implements IEvent {
   }
 
   public get host_name() {
-    // TODO: Implement this.
-    return 'Default Host Name';
+    const user = firebase.auth().currentUser!;
+    if (user.uid === this.host) {
+      return 'You';
+    } else {
+      return 'Event Host'
+    }
   }
 
   /** Created date in human readable format. */
