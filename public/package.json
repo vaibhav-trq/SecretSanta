@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "lint": "eslint \"src/js/**/*\"",
-    "build": "tsc && pug ./src/index.pug --out ./dst/"
+    "build": "tsc && pug ./src/index.pug --out ./dst/",
+    "watch_ts": "tsc -w",
+    "watch_pug": "pug ./src/index.pug --out ./dst/ -w"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +25,5 @@
     "@types/less": "^3.0.2",
     "firebaseui": "^4.7.1"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
