@@ -1,12 +1,24 @@
 import { PageTypes, NavigationButtons } from "../models/nav.js";
-import { Page } from "../models/page.js";
+import { IRenderData, Page } from "../models/page.js";
 
 export class MatchPage extends Page {
   protected readonly prefix_ = PageTypes.MATCH;
   protected readonly buttons_ = new Set<NavigationButtons>(Object.values(NavigationButtons));
+
+  protected async onRender(renderData: IRenderData) {
+    $('#match-profile-button').on('click', async () => {
+      await this.manager_.swapPage(PageTypes.MATCH_PROFILE);
+    });
+  }
 }
 
 export class EventDetailsPage extends Page {
   protected readonly prefix_ = PageTypes.EVENT_DETAILS;
   protected readonly buttons_ = new Set<NavigationButtons>(Object.values(NavigationButtons));
+
+  protected async onRender(renderData: IRenderData) {
+    $('#draw-names-button').on('click', async () => {
+      await this.manager_.swapPage(PageTypes.MATCH);
+    });
+  }
 }

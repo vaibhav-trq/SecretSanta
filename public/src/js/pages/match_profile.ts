@@ -35,7 +35,7 @@ export class MatchProfilePage extends Page {
     numberField.setNumber(user.phoneNumber || '');
 
     $('.profile-close').on('click', async () => {
-      await this.manager_.back();
+      await this.manager_.swapPage(PageTypes.MATCH);
     });
   }
 };
