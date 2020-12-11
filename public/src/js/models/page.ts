@@ -1,11 +1,12 @@
 import { NavigationButtons, PageTypes } from "./nav.js";
 import { RenderTemplate } from "../common.js";
 import { IPageManagerInternal } from "./page_manager.js";
+import { Logger } from "./logger.js";
 
 // @ts-
 export interface IRenderData { };
 
-export abstract class Page {
+export abstract class Page extends Logger {
   /** DOM used for rendering. */
   private static readonly content_ = $('#content');
   /** Template prefix for page. */
@@ -16,6 +17,7 @@ export abstract class Page {
   protected readonly manager_: IPageManagerInternal;
 
   constructor(manager: IPageManagerInternal) {
+    super();
     this.manager_ = manager;
   }
 
