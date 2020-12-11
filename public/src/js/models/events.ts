@@ -45,13 +45,14 @@ export class Event implements IEvent {
   key?: string;
 
   constructor(hostIdOrKey: string, content?: Object) {
+    const user = firebase.auth().currentUser!;
     if (!content) {
       const now = new Date();
       this.name = 'Secret Santa 2020';
       this.limit = -1;
       this.generated_matches = false;
       this.host = hostIdOrKey;
-      this.event_host = 'Default Event Host';
+      this.event_host = user.displayName!;
       this.created_date = now.getTime();
       this.updated_date = now.getTime();
       this.participants = [hostIdOrKey];
