@@ -1,5 +1,4 @@
-@ribbon: #ffcc00;
-@xmas-red: #DF1F00;
+@import "../common/globals.less";
 
 .ribbon {
   width: 150px;
@@ -12,7 +11,7 @@
     z-index: -1;
     content: '';
     display: block;
-    border: 5px solid @ribbon;
+    border: 5px solid @xmas-dark-red;
   }
 
   &::after {
@@ -20,7 +19,7 @@
     z-index: -1;
     content: '';
     display: block;
-    border: 5px solid @ribbon;
+    border: 5px solid @xmas-dark-red;
   }
 
   span {
