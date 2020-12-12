@@ -70,7 +70,6 @@ export class Event implements IEvent {
   /** Check if user is event host */
   public get is_host() {
     const user = firebase.auth().currentUser!;
-    console.log("check host", this.host !== user.uid)
     return this.host === user.uid;
   }
 
