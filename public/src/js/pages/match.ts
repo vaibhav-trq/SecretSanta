@@ -2,7 +2,8 @@ const { firebase } = window;
 
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
-import { Event } from "../models/events.js";
+import { IParticipant, SecretSantaEvent } from "../models/events.js";
+import { RenderTemplate } from "../common.js";
 
 interface IMatchContext extends IRenderData {
   match: {
@@ -22,12 +23,12 @@ interface IMatchContext extends IRenderData {
 
 abstract class PageWithEventContext extends Page {
   protected readonly matchRef_ = firebase.database().ref('/matches');
-  protected event_: Event | undefined;
+  protected event_: SecretSantaEvent | undefined;
 
   protected async setContext(context: any | undefined) {
     if (context) {
       // Preserve context if the back button is pressed.
-      this.ASSERT(context instanceof Event, "Provided invalid context");
+      this.ASSERT(context instanceof SecretSantaEvent, `Provided invalid context: ${typeof context} !== ${typeof SecretSantaEvent}`);
       this.event_ = context;
     }
   }
@@ -66,8 +67,25 @@ export class MatchPage extends PageWithEventContext {
 export class EventDetailsPage extends PageWithEventContext {
   protected readonly prefix_ = PageTypes.EVENT_DETAILS;
   protected readonly buttons_ = new Set<NavigationButtons>(Object.values(NavigationButtons));
+  protected readonly participantsRef_ = firebase.database().ref('/participants');
 
   protected async onRender(renderData: IRenderData) {
+    const participantsRef = this.participantsRef_.child(this.event_!.key!);
+    participantsRef.on('value', (snapshot) => {
+      const no_rsvp = $("#naughty-participants .names");
+      const yes_rsvp = $("#nice-participants .names");
+      no_rsvp.html('');
+      yes_rsvp.html('');
+      snapshot.forEach(ele => {
+        // const uid = ele.key!;
+        const participants: IParticipant = ele.val();
+        const targetDom = participants.rsvp.attending ? yes_rsvp : no_rsvp;
+        RenderTemplate("event-participant", targetDom, participants);
+      });
+      $("#naughty-participants h6 span").text(`(${no_rsvp.children().length})`);
+      $("#nice-participants h6 span").text(`(${yes_rsvp.children().length})`);
+    });
+
     $('#draw-names-button').on('click', async () => {
       await this.manager_.swapPage(PageTypes.MATCH, this.event_!);
     });

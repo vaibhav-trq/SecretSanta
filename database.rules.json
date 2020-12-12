@@ -11,6 +11,19 @@
     "events": {
       ".read": true,
       ".write": true
+    },
+    "participants": {
+      "$eventId": {
+        ".read": "auth != null",
+        ".write": false,
+        "$uid": {
+          ".write":"$uid === auth.uid"
+        }
+      }
+    },
+    "matches": {
+      ".read": true,
+      ".write": true
     }
   }
 }

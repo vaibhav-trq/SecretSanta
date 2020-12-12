@@ -1,6 +1,14 @@
 const { firebase } = window;
 import { HumanReadableDate } from "../common.js";
 
+export interface IParticipant {
+  name: string,
+  rsvp: {
+    invited_date?: number,
+    attending: boolean,
+  },
+};
+
 /** A secret santa event object. */
 interface IEvent {
   /** Event Name */
@@ -15,10 +23,8 @@ interface IEvent {
   created_date: number,
   /** Last update time. */
   updated_date: number,
-  /** All participants for the event. */
-  participants: string[],
-  /** Participants which are invited to an event. */
-  invited: string[],
+  /** Number of participants. */
+  num_participants: number,
   /** Is the event invite only (invite via URL). */
   private: boolean,
   /** Once true, no more guests can join the event. */
@@ -29,13 +35,12 @@ interface IEvent {
   end_date?: number,
 };
 
-export class Event implements IEvent {
+export class SecretSantaEvent implements IEvent {
   name!: string;
   limit!: number;
   host!: string;
   event_host!: string;
-  participants!: string[];
-  invited!: string[];
+  num_participants!: number;
   private!: boolean;
   generated_matches!: boolean;
   created_date!: number;
@@ -55,8 +60,7 @@ export class Event implements IEvent {
       this.event_host = user.displayName!;
       this.created_date = now.getTime();
       this.updated_date = now.getTime();
-      this.participants = [hostIdOrKey];
-      this.invited = [];
+      this.num_participants = 1;
       this.private = true;
     } else {
       this.key = hostIdOrKey;
@@ -75,8 +79,8 @@ export class Event implements IEvent {
 
   /** Human readable participant summary. */
   public get participant_summary() {
-    const ext = (this.participants.length > 1 ? 's' : '');
-    return `${this.participants.length} Santa Helper${ext}`;
+    const ext = (this.num_participants > 1 ? 's' : '');
+    return `${this.num_participants} Santa Helper${ext}`;
   }
 
   /** Updated date in human readable format. */
