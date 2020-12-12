@@ -1,3 +1,4 @@
+const { firebase } = window;
 import { HumanReadableDate } from "../common.js";
 
 /** A secret santa event object. */
@@ -8,6 +9,8 @@ interface IEvent {
   limit: number,
   /** Host UID. */
   host: string,
+  /** Host Name */
+  event_host: string;
   /** Time of creation. */
   created_date: number,
   /** Last update time. */
@@ -30,6 +33,7 @@ export class Event implements IEvent {
   name!: string;
   limit!: number;
   host!: string;
+  event_host!: string;
   participants!: string[];
   invited!: string[];
   private!: boolean;
@@ -41,12 +45,14 @@ export class Event implements IEvent {
   key?: string;
 
   constructor(hostIdOrKey: string, content?: Object) {
+    const user = firebase.auth().currentUser!;
     if (!content) {
       const now = new Date();
       this.name = 'Secret Santa 2020';
       this.limit = -1;
       this.generated_matches = false;
       this.host = hostIdOrKey;
+      this.event_host = user.displayName!;
       this.created_date = now.getTime();
       this.updated_date = now.getTime();
       this.participants = [hostIdOrKey];
@@ -61,6 +67,12 @@ export class Event implements IEvent {
     }
   }
 
+  /** Human readable participant summary. */
+  public get participant_summary() {
+    const ext = (this.participants.length > 1 ? 's' : '');
+    return `${this.participants.length} Santa Helper${ext}`;
+  }
+
   /** Updated date in human readable format. */
   public get formatted_updated_date() {
     const d = new Date();
@@ -69,8 +81,12 @@ export class Event implements IEvent {
   }
 
   public get host_name() {
-    // TODO: Implement this.
-    return 'Default Host Name';
+    const user = firebase.auth().currentUser!;
+    if (user.uid === this.host) {
+      return 'You';
+    } else {
+      return this.event_host;
+    }
   }
 
   /** Created date in human readable format. */
