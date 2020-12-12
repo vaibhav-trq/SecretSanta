@@ -20,5 +20,15 @@ export class EventDetailsPage extends Page {
     $('#draw-names-button').on('click', async () => {
       await this.manager_.swapPage(PageTypes.MATCH);
     });
+    $('#invite-link-button').on('click', async () => {
+      let eventLink = "www.eventURL.com/" + ""
+      let selBox = document.createElement('textarea');
+      selBox.value = eventLink;
+      document.body.appendChild(selBox);
+      selBox.focus();
+      selBox.select();
+      document.execCommand('copy');
+      document.body.removeChild(selBox);
+    });
   }
 }

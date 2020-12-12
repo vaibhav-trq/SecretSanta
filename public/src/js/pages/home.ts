@@ -65,7 +65,7 @@ export class HomePage extends Page {
 
   public async createHostedEvent() {
     const user = firebase.auth().currentUser!;
-    const event = new Event(user.uid);
+    const event = new Event(user.uid, "eventId");
     await firebase.database().ref('/events').push(event);
   }
 };
