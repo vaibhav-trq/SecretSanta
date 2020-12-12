@@ -7,7 +7,7 @@ interface IEvent {
   /** Max number of attendees. */
   limit: number,
   /** Event UID */
-  event_id: string,
+  key?: string,
   /** Host UID. */
   host: string,
   /** Time of creation. */
@@ -31,7 +31,6 @@ interface IEvent {
 export class Event implements IEvent {
   name!: string;
   limit!: number;
-  event_id!: string;
   host!: string;
   participants!: string[];
   invited!: string[];
@@ -43,21 +42,20 @@ export class Event implements IEvent {
   end_date?: number;
   key?: string;
 
-  constructor(hostIdOrKey: string, eventIdOrKey: string, content?: Object) {
+  constructor(hostIdOrKey: string, content?: Object) {
     if (!content) {
       const now = new Date();
       this.name = 'Secret Santa 2020';
       this.limit = -1;
       this.generated_matches = false;
-      this.event_id = eventIdOrKey;
       this.host = hostIdOrKey;
       this.created_date = now.getTime();
       this.updated_date = now.getTime();
       this.participants = [hostIdOrKey];
       this.invited = [];
       this.private = true;
-    } else {
       this.key = hostIdOrKey;
+    } else {
       for (const [key, value] of Object.entries(content)) {
         // @ts-expect-error
         this[key] = value;
