@@ -21,8 +21,9 @@ export class EventDetailsPage extends Page {
       await this.manager_.swapPage(PageTypes.MATCH);
     });
     $('#invite-link-button').on('click', async () => {
-      let eventLink = "www.eventURL.com/" + ""
-      let selBox = document.createElement('textarea');
+      const eventID = "randomId";
+      const eventLink = `${document.location.origin}/join/${eventID}`
+      const selBox = document.createElement('textarea');
       selBox.value = eventLink;
       document.body.appendChild(selBox);
       selBox.focus();
