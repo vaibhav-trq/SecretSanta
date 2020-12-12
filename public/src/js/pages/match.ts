@@ -1,3 +1,5 @@
+const { firebase } = window;
+
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { Event } from "../models/events.js";
@@ -25,7 +27,7 @@ abstract class PageWithEventContext extends Page {
   protected async setContext(context: any | undefined) {
     if (context) {
       // Preserve context if the back button is pressed.
-      this.ASSERT(typeof context === typeof Event, "Provided invalid context");
+      this.ASSERT(context instanceof Event, "Provided invalid context");
       this.event_ = context;
     }
   }
