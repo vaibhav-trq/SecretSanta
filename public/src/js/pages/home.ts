@@ -51,10 +51,6 @@ export class HomePage extends Page {
 
   private createEventDom(event: Event) {
     const ele = RenderTemplate('event', null, event);
-    const user = firebase.auth().currentUser!;
-    if (event.host === user.uid) {
-      ele.append('<div class="ribbon ribbon-top-right"><span>Host</span></div>')
-    }
 
     var doneDrawing = false;
     ele.on('click', async () => {
