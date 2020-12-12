@@ -8,4 +8,10 @@ export class Logger {
   protected LOG(message: any, ...optionalArgs: any[]) {
     console.debug(`${this.constructor.name}: ${message}`, ...optionalArgs);
   }
+
+  protected ASSERT(condition: boolean, message: any) {
+    if (!condition) {
+      throw new Error(`${this.constructor.name}: ${message}`);
+    }
+  }
 };

@@ -83,7 +83,7 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
     });
   }
 
-  async swapPage(target: PageTypes) {
+  async swapPage(target: PageTypes, context: any | undefined = undefined) {
     this.LOG('Swapping to:', target);
     const next = this.pages_.get(target);
     if (!next) {
@@ -102,6 +102,6 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
       this.history_.push(target);
     }
 
-    await next.render();
+    await next.render(context);
   }
 };

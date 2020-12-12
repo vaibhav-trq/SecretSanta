@@ -3,7 +3,7 @@ import { RenderTemplate } from "../common.js";
 import { IPageManagerInternal } from "./page_manager.js";
 import { Logger } from "./logger.js";
 
-// @ts-
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IRenderData { };
 
 export abstract class Page extends Logger {
@@ -22,7 +22,8 @@ export abstract class Page extends Logger {
   }
 
   /** Render the page. */
-  async render() {
+  async render(context: any | undefined) {
+    await this.setContext(context);
     const data = await this.pageData();
     // Render the page content.
     RenderTemplate(`${this.prefix_}-content`, Page.content_, data);
@@ -45,4 +46,8 @@ export abstract class Page extends Logger {
 
   /** Called prior to swapping to a different page. */
   onExit(): void { return; }
+
+
+  /** Called prior to swapping to a different page. */
+  protected async setContext(context: any): Promise<void> { return; }
 };
