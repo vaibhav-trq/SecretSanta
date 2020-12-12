@@ -6,8 +6,6 @@ interface IEvent {
   name: string,
   /** Max number of attendees. */
   limit: number,
-  /** Event UID */
-  key?: string,
   /** Host UID. */
   host: string,
   /** Time of creation. */
@@ -54,8 +52,8 @@ export class Event implements IEvent {
       this.participants = [hostIdOrKey];
       this.invited = [];
       this.private = true;
-      this.key = hostIdOrKey;
     } else {
+      this.key = hostIdOrKey;
       for (const [key, value] of Object.entries(content)) {
         // @ts-expect-error
         this[key] = value;
