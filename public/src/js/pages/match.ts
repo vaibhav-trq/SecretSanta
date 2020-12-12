@@ -3,6 +3,7 @@ const { firebase } = window;
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { SecretSantaEvent } from "../models/events.js";
+import { AddMessage } from "../common.js";
 
 interface IMatchContext extends IRenderData {
   match: {
@@ -81,6 +82,16 @@ export class EventDetailsPage extends PageWithEventContext {
   protected async onRender(renderData: IRenderData) {
     $('#draw-names-button').on('click', async () => {
       await this.manager_.swapPage(PageTypes.MATCH, this.event_!);
+    });
+    $('#invite-link-button').on('click', async (e) => {
+      const selBox = document.createElement('textarea');
+      selBox.value = `${document.location.origin}/join/${this.event_!.key!}`;
+      document.body.appendChild(selBox);
+      selBox.focus();
+      selBox.select();
+      document.execCommand('copy');
+      document.body.removeChild(selBox);
+      AddMessage($(e.target), "Invite link copied to clipboard", true);
     });
   }
 }
