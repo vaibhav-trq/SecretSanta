@@ -6,7 +6,7 @@ export class Logger {
    * Used in exactly the same way as console.log(...);
    */
   protected LOG(message: any, ...optionalArgs: any[]) {
-    console.debug(`${this.constructor.name}: ${message}`, ...optionalArgs);
+    console.debug(`${this.constructor.name}:`, message, ...optionalArgs);
   }
 
   protected ASSERT(condition: boolean, message: any) {

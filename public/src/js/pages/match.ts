@@ -1,6 +1,7 @@
+const { firebase } = window;
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
-import { Event } from "../models/events.js";
+import { SecretSantaEvent } from "../models/events.js";
 
 interface IMatchContext extends IRenderData {
   match: {
@@ -20,12 +21,12 @@ interface IMatchContext extends IRenderData {
 
 abstract class PageWithEventContext extends Page {
   protected readonly matchRef_ = firebase.database().ref('/matches');
-  protected event_: Event | undefined;
+  protected event_: SecretSantaEvent | undefined;
 
   protected async setContext(context: any | undefined) {
     if (context) {
       // Preserve context if the back button is pressed.
-      this.ASSERT(typeof context === typeof Event, "Provided invalid context");
+      this.ASSERT(context instanceof SecretSantaEvent, `Provided invalid context: ${typeof context} !== ${typeof SecretSantaEvent}`);
       this.event_ = context;
     }
   }
@@ -64,6 +65,17 @@ export class MatchPage extends PageWithEventContext {
 export class EventDetailsPage extends PageWithEventContext {
   protected readonly prefix_ = PageTypes.EVENT_DETAILS;
   protected readonly buttons_ = new Set<NavigationButtons>(Object.values(NavigationButtons));
+
+  protected async pageData() {
+    // Participants that RSVP'ed yes.
+    const nice = this.event_!.participants.filter(p => p.rsvp.attending);
+    // Participants that RSVP'ed no.
+    const naughty = this.event_!.participants.filter(p => !p.rsvp.attending);
+    return {
+      nice,
+      naughty,
+    }
+  }
 
   protected async onRender(renderData: IRenderData) {
     $('#draw-names-button').on('click', async () => {

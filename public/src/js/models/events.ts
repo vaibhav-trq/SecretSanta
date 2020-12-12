@@ -1,6 +1,15 @@
 const { firebase } = window;
 import { HumanReadableDate } from "../common.js";
 
+interface IParticipant {
+  uid: string,
+  name: string,
+  rsvp: {
+    invited_date?: number,
+    attending: boolean,
+  },
+};
+
 /** A secret santa event object. */
 interface IEvent {
   /** Event Name */
@@ -16,7 +25,7 @@ interface IEvent {
   /** Last update time. */
   updated_date: number,
   /** All participants for the event. */
-  participants: string[],
+  participants: IParticipant[],
   /** Participants which are invited to an event. */
   invited: string[],
   /** Is the event invite only (invite via URL). */
@@ -29,12 +38,12 @@ interface IEvent {
   end_date?: number,
 };
 
-export class Event implements IEvent {
+export class SecretSantaEvent implements IEvent {
   name!: string;
   limit!: number;
   host!: string;
   event_host!: string;
-  participants!: string[];
+  participants!: IParticipant[];
   invited!: string[];
   private!: boolean;
   generated_matches!: boolean;
@@ -55,7 +64,13 @@ export class Event implements IEvent {
       this.event_host = user.displayName!;
       this.created_date = now.getTime();
       this.updated_date = now.getTime();
-      this.participants = [hostIdOrKey];
+      this.participants = [{
+        name: user.displayName || "Default Name",
+        uid: hostIdOrKey,
+        rsvp: {
+          attending: true,
+        },
+      }];
       this.invited = [];
       this.private = true;
     } else {
