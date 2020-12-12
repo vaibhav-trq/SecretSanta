@@ -14,4 +14,10 @@ export class Logger {
       throw new Error(`${this.constructor.name}: ${message}`);
     }
   }
+
+  protected ASSERT(condition: boolean, message: any) {
+    if (!condition) {
+      throw new Error(`${this.constructor.name}: ${message}`);
+    }
+  }
 };
