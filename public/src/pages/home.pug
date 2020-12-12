@@ -17,3 +17,7 @@ template#event
       p.card-text.secondary-font {{participant_summary}}
       p.card-text
         small.text-muted Last updated {{formatted_updated_date}}
+    | {{#is_host}}
+    .ribbon.ribbon-top-right
+      span Host
+    | {{/is_host}}
