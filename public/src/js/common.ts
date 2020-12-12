@@ -5,6 +5,12 @@ export const SwapContent = (src: String, data?: Object) => {
   RenderTemplate(`${src}-menu-buttons`, $('#menu-buttons'));
 };
 
+export const AddMessage = (element: JQuery<HTMLElement>, message: string, success: boolean = false) => {
+  const template_name = "add-message-" + (success ? "success" : "danger");
+  const msg = RenderTemplate(template_name, null, { message });
+  msg.insertAfter(element.parent()).delay(success ? 1500 : 5000).queue(() => msg.remove());
+}
+
 export const RenderTemplate = (src: String, dst: JQuery<HTMLElement> | null, data?: Object) => {
   const template = $(`template#${src}`).html();
   const rendered = Mustache.render(template, data);
