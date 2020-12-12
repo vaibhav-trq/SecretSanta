@@ -67,6 +67,12 @@ export class Event implements IEvent {
     }
   }
 
+  /** Check if user is event host */
+  public get is_host() {
+    const user = firebase.auth().currentUser!;
+    return this.host === user.uid;
+  }
+
   /** Human readable participant summary. */
   public get participant_summary() {
     const ext = (this.participants.length > 1 ? 's' : '');
