@@ -64,7 +64,11 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
   async back() {
     // TODO: Implement true history.
     this.LOG('onBack');
-    await this.swapPage(PageTypes.HOME);
+    if (this.history_.length > 1) {
+      await this.swapPage(this.history_[this.history_.length - 2]);
+    } else {
+      await this.swapPage(PageTypes.HOME);
+    }
   }
 
   private registerButtons() {

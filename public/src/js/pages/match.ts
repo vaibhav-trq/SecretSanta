@@ -1,4 +1,5 @@
 const { firebase } = window;
+
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { SecretSantaEvent } from "../models/events.js";
