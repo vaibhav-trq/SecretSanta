@@ -3,8 +3,7 @@ const { firebase } = window;
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { IParticipant, SecretSantaEvent } from "../models/events.js";
-import { RenderTemplate } from "../common.js";
-import { AddMessage, GetErrorMessage } from "../common.js";
+import { AddMessage, GetErrorMessage, RenderTemplate } from "../common.js";
 
 interface IMatchContext extends IRenderData {
   match: {
@@ -70,8 +69,17 @@ export class EventDetailsPage extends PageWithEventContext {
   protected readonly buttons_ = new Set<NavigationButtons>(Object.values(NavigationButtons));
   protected readonly participantsRef_ = firebase.database().ref('/participants');
 
+  protected async pageData(): Promise<SecretSantaEvent> {
+    return this.event_!;
+  }
+
   protected async onRender(renderData: IRenderData) {
     const participantsRef = this.participantsRef_.child(this.event_!.key!);
+    const user = firebase.auth().currentUser!;
+    const isAttending =
+      await participantsRef.child(`${user.uid}/rsvp/attending`).once('value');
+    $('#rsvp').prop("checked", isAttending.val());
+
     participantsRef.on('value', (snapshot) => {
       const no_rsvp = $("#naughty-participants .names");
       const yes_rsvp = $("#nice-participants .names");
@@ -106,15 +114,14 @@ export class EventDetailsPage extends PageWithEventContext {
   }
 
   private async updateRSVP(element: JQuery<HTMLElement>) {
+    const user = firebase.auth().currentUser!;
+    const rsvpRef = this.participantsRef_.child(`${this.event_!.key!}/${user.uid}/rsvp`);
     const checked = element.prop('checked');
+
+    const message = checked ? "We'll see you there!" : "You'll be missed :(";
     try {
-      if (checked) {
-        this.LOG("box is checked!")
-        AddMessage(element, 'Thanks for confirming your attendance!', true);
-      } else {
-        this.LOG("box is unchecked!")
-        AddMessage(element, 'You haven\'t RSVP\'d yet!', true);
-      }
+      await rsvpRef.update({ attending: checked });
+      AddMessage(element, message, true);
     } catch (e) {
       AddMessage(element, GetErrorMessage(e));
       element.prop('checked', !checked);

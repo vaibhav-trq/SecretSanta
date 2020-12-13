@@ -14,8 +14,8 @@ template#event-participant
 template#event-details-content
   .event-modal-large.col-12.text-center.p-4
     .col-12
-      h1 December 25
-      h6 Secret Santa 2020
+      h1 {{end_date}}
+      h6 {{name}}
     .d-flex.flex-row
       +rsvp_col("naughty", "hasn't rsvp'd")
       +rsvp_col("nice", "has rsvp'd")
@@ -24,8 +24,6 @@ template#event-details-content
       +chat_button('draw-names-button', 'Draw Names')
       +chat_button('invite-link-button', 'Invite Guests')
       | {{/is_host}}
-      | {{^is_host}}
       .custom-control.form-control-lg.custom-checkbox
         input#rsvp.custom-control-input(type='checkbox')
         label.custom-control-label(for='rsvp') I am attending
-      | {{/is_host}}
