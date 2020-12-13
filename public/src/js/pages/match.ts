@@ -3,7 +3,7 @@ const { firebase } = window;
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { SecretSantaEvent } from "../models/events.js";
-import { AddMessage } from "../common.js";
+import { AddMessage, GetErrorMessage } from "../common.js";
 
 interface IMatchContext extends IRenderData {
   match: {
@@ -84,8 +84,7 @@ export class EventDetailsPage extends PageWithEventContext {
       await this.manager_.swapPage(PageTypes.MATCH, this.event_!);
     });
     $('#rsvp').on('change', async (e) => {
-      const checked = $(e.target).prop('checked');
-      this.LOG("RSVP changed!", checked)
+      await this.updateRSVP($(e.target));
     });
     $('#invite-link-button').on('click', async (e) => {
       const selBox = document.createElement('textarea');
@@ -98,4 +97,20 @@ export class EventDetailsPage extends PageWithEventContext {
       AddMessage($(e.target), "Invite link copied to clipboard", true);
     });
   }
+
+  private async updateRSVP(element: JQuery<HTMLElement>) {
+    const checked = element.prop('checked');
+    try {
+      if (checked) {
+        this.LOG("box is checked!")
+        AddMessage(element, 'Thanks for confirming your attendance!', true);
+      } else {
+        this.LOG("box is unchecked!")
+        AddMessage(element, 'You haven\'t RSVP\'d yet!', true);
+      }
+    } catch (e) {
+      AddMessage(element, GetErrorMessage(e));
+      element.prop('checked', !checked);
+    }
+  };
 }
