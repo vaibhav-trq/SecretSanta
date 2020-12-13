@@ -1,59 +1,16 @@
-import * as functions from 'firebase-functions';
+import * as firebase from 'firebase-functions';
 import * as admin from 'firebase-admin';
-admin.initializeApp(functions.config().firebase);
+import { OnUserCreated, OnUserDeleted } from './auth';
+import { OnHelloWorld } from './http';
+import { OnEventCreated } from './db';
+admin.initializeApp(firebase.config().firebase);
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+// Auth handlers.
+export const createUser = firebase.auth.user().onCreate(OnUserCreated);
+export const deleteUser = firebase.auth.user().onDelete(OnUserDeleted)
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", { structuredData: true });
-  response.send("Hello from Firebase!");
-});
+// DB Handlers.
+export const createEvent = firebase.database.ref('/events/{eventId}').onCreate(OnEventCreated);
 
-interface IAddress {
-  street: string,
-  street2: string,
-  city: string,
-  state: string,
-  zip: string,
-};
-interface ISettings {
-  phone: string | null,
-  email: string | null,
-  text_notifications: string | null,
-};
-
-const createAddress = (): IAddress => {
-  return {
-    street: "",
-    street2: "",
-    city: "",
-    state: "",
-    zip: "",
-  }
-}
-
-class Settings implements ISettings {
-  phone: string | null;
-  email: string | null;
-  text_notifications: string | null;
-
-  constructor(verified: boolean, phone?: string, email?: string) {
-    this.phone = phone || null;
-    this.email = verified ? email! : null;
-    this.text_notifications = null;
-  }
-}
-
-exports.createUser = functions.auth.user().onCreate(async (user, context) => {
-  return admin.database().ref('/users/' + user.uid).set({
-    displayName: user.displayName,
-    address: createAddress(),
-    settings: new Settings(user.emailVerified, user.phoneNumber, user.email),
-  });
-});
-
-exports.removeUser = functions.auth.user().onDelete((user, context) => {
-  functions.logger.info("Users deleted!", { structuredData: true });
-  return admin.database().ref('/users/' + user.uid).remove();
-});
+// HTTP Handlers.
+export const helloWorld = firebase.https.onRequest(OnHelloWorld);
