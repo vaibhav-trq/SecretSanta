@@ -1,7 +1,7 @@
 import * as firebase from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { OnUserCreated, OnUserDeleted } from './auth';
-import { OnHelloWorld } from './http';
+import { OnHelloWorld, OnJoinEvent } from './http';
 import { OnEventCreated } from './db';
 admin.initializeApp(firebase.config().firebase);
 
@@ -14,3 +14,4 @@ export const createEvent = firebase.database.ref('/events/{eventId}').onCreate(O
 
 // HTTP Handlers.
 export const helloWorld = firebase.https.onRequest(OnHelloWorld);
+export const joinEvent = firebase.https.onCall(OnJoinEvent);
