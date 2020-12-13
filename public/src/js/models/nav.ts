@@ -3,11 +3,6 @@ export enum NavigationButtons {
   HOME = 'home',
   PROFILE = 'profile',
   LOGOUT = 'logout',
-
-  // These buttons are temporary for easy debugging.
-  MATCH_PROFILE = 'match-profile-tmp',
-  MATCH = 'match-tmp',
-  EVENT_DETAILS = 'event-details-tmp',
 };
 
 /** Templates for which pages exist. */
