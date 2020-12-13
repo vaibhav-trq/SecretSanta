@@ -1,7 +1,4 @@
-include ../common
-
-mixin participant()
-  p4.p-3 {{name}}
+include ../common  
 
 mixin rsvp_col(title, subtitle)
   - var id = title + "-participants"
@@ -9,14 +6,10 @@ mixin rsvp_col(title, subtitle)
     h1.tableTitle.mb-0= title
     h6= subtitle
       span.pl-2
-        | ({{#{title}.length}})
     .names.d-flex.flex-row.flex-wrap.justify-content-center
-        | {{##{title}}}
-        +participant()
-        | {{/#{title}}}
 
 template#event-participant
-  +participant()
+  p4.p-3 {{name}}
 
 template#event-details-content
   .event-modal-large.col-12.text-center.p-4
