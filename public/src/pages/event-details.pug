@@ -1,7 +1,4 @@
-include ../common
-
-mixin participant()
-  p4.p-3 {{name}}
+include ../common  
 
 mixin rsvp_col(title, subtitle)
   - var id = title + "-participants"
@@ -9,23 +6,24 @@ mixin rsvp_col(title, subtitle)
     h1.tableTitle.mb-0= title
     h6= subtitle
       span.pl-2
-        | ({{#{title}.length}})
     .names.d-flex.flex-row.flex-wrap.justify-content-center
-        | {{##{title}}}
-        +participant()
-        | {{/#{title}}}
 
 template#event-participant
-  +participant()
+  p4.p-3 {{name}}
 
 template#event-details-content
   .event-modal-large.col-12.text-center.p-4
     .col-12
-      h1 December 25
-      h6 Secret Santa 2020
+      h1 {{end_date}}
+      h6 {{name}}
     .d-flex.flex-row
       +rsvp_col("naughty", "hasn't rsvp'd")
       +rsvp_col("nice", "has rsvp'd")
     .col-12
+      | {{#is_host}}
       +chat_button('draw-names-button', 'Draw Names')
       +chat_button('invite-link-button', 'Invite Guests')
+      | {{/is_host}}
+      .custom-control.form-control-lg.custom-checkbox
+        input#rsvp.custom-control-input(type='checkbox')
+        label.custom-control-label(for='rsvp') I am attending

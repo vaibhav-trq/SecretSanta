@@ -1,4 +1,4 @@
-import { NavigationButtons, PageTypes } from "./nav.js";
+import { ButtonToPage, NavigationButtons, PageTypes } from "./nav.js";
 import { RenderTemplate } from "../common.js";
 import { IPageManagerInternal } from "./page_manager.js";
 import { Logger } from "./logger.js";
@@ -31,7 +31,9 @@ export abstract class Page extends Logger {
     // Render the appropriate nav buttons.s
     $('#nav-buttons button').addClass('d-none');
     this.buttons_.forEach(btn => {
-      $(`#${btn}-button`).removeClass('d-none');
+      if (ButtonToPage.get(btn) !== this.prefix_) {
+        $(`#${btn}-button`).removeClass('d-none');
+      }
     });
     await this.onRender(data);
   }
