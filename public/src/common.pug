@@ -11,3 +11,14 @@ mixin formInput(elementId, placeholder, value, inputType='text')
   .input-badge.pb-1
     block
     input.form-control(id=id type=inputType placeholder=placeholder name=elementId value=value)&attributes(attributes)
+
+mixin add_message(type)
+  - var text_class = "text-" + type
+  h5(class=text_class)
+    small.font-weight-bold {{message}}
+
+template#add-message-danger
+  +add_message("danger")
+
+template#add-message-success
+  +add_message("success")

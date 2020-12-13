@@ -3,7 +3,7 @@ const { firebase } = window;
 import { IRenderData, Page } from "../models/page.js";
 import { IUserAddress, IUserSettings, LoadUserData } from '../models/users.js';
 import { NavigationButtons, PageTypes } from "../models/nav.js";
-import { GetErrorMessage } from "../common.js";
+import { AddMessage, GetErrorMessage } from "../common.js";
 import { IPageManagerInternal } from "../models/page_manager.js";
 import { intlTelInput } from "../models/intlTelInput.js";
 
@@ -23,12 +23,6 @@ const GetOriginalValue = (attr: string): string => {
   }
   return '';
 };
-
-const AddMessage = (element: JQuery<HTMLElement>, message: string, success: boolean = false) => {
-  const msg = $(`<h5><small class="font-weight-bold">${message}</small></h5>`);
-  msg.addClass(success ? 'text-success' : 'text-danger');
-  msg.insertAfter(element.parent()).delay(success ? 1000 : 5000).queue(() => msg.remove());
-}
 
 export class ProfilePage extends Page {
   protected readonly prefix_ = PageTypes.PROFILE;
