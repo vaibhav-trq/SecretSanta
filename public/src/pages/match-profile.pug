@@ -29,6 +29,33 @@ mixin matchProfile()
           +formInput('state', 'State', '{{address.state}}')(readonly)
         .form-group.col-md-2
           +formInput('zip', 'Zip Code', '{{address.street}}')(pattern="[0-9]*", readonly)
+    div.border-top.my-2.row.border-dark
+    h3.text-center My Favorites
+    form#match-favorites-form
+      label My favorite drinks are
+      .form-group
+          +formInput('drink', 'Peppermint Mochas, Bailey\'s + Hot Chocolate', '{{favorites.drink}}')(readonly)
+      label My favorite savory snacks are
+      .form-group
+          +formInput('savory_snack', 'scooby snacks', '{{favorites.savory_snack}}')(readonly)
+      label My favorite sweet snacks are
+      .form-group
+          +formInput('sweet_snack', 'Mrs. Claus\'s cookies', '{{favorites.savory_food}}')(readonly)
+      label Clothing Sizes
+      .form-row
+        .form-group.col-md-6
+          +formInput('shirt_size', 'Shirt Size', '{{favorites.shirt_size}}')(readonly)
+        .form-group.col-md-6
+          +formInput('shoe_size', 'Shoe/Sock Size', '{{favorites.shoe_size}}')(readonly)
+      label I can never resist adding another one of these to my collection
+      .form-group
+          +formInput('more', 'ornaments', '{{favorites.more}}')(readonly)
+      label I LOVE this, but never buy it for myself
+      .form-group
+          +formInput('love', 'reindeer', '{{favorites.love}}')(readonly)
+      label But please, I really don't want more of
+      .form-group
+          +formInput('dont_want', 'lumps of coal', '{{favorites.dont_want}}')(readonly)
 
 template#match-profile-content
   .col

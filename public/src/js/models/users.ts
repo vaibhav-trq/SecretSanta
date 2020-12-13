@@ -1,5 +1,11 @@
 const { firebase } = window;
 
+export interface IUserFavorites {
+  drink: string,
+  food: string,
+  [key: string]: string,
+};
+
 export interface IUserAddress {
   street: string,
   street2: string,
@@ -16,6 +22,7 @@ export interface IUserSettings {
 
 export interface IUserData {
   address: IUserAddress,
+  favorites: IUserFavorites,
   settings: IUserSettings,
 };
 

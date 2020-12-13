@@ -10,6 +10,16 @@ export const helloWorld = functions.https.onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
+interface IFavorites {
+  drink: string,
+  savory_snack: string,
+  sweet_snack: string,
+  shirt_size: string,
+  shoe_size: string,
+  more: string,
+  love: string,
+  dont_want: string,
+};
 interface IAddress {
   street: string,
   street2: string,
@@ -22,6 +32,19 @@ interface ISettings {
   email: string | null,
   text_notifications: string | null,
 };
+
+const createFavorites = (): IFavorites => {
+  return {
+    drink: "",
+    savory_snack: "",
+    sweet_snack: "",
+    shirt_size: "",
+    shoe_size: "",
+    more: "",
+    love: "",
+    dont_want: "",
+  }
+}
 
 const createAddress = (): IAddress => {
   return {
@@ -49,6 +72,7 @@ exports.createUser = functions.auth.user().onCreate(async (user, context) => {
   return admin.database().ref('/users/' + user.uid).set({
     displayName: user.displayName,
     address: createAddress(),
+    favorites: createFavorites(),
     settings: new Settings(user.emailVerified, user.phoneNumber, user.email),
   });
 });
