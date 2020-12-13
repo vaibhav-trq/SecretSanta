@@ -3,11 +3,6 @@ export enum NavigationButtons {
   HOME = 'home',
   PROFILE = 'profile',
   LOGOUT = 'logout',
-
-  // These buttons are temporary for easy debugging.
-  MATCH_PROFILE = 'match-profile-tmp',
-  MATCH = 'match-tmp',
-  EVENT_DETAILS = 'event-details-tmp',
 };
 
 /** Templates for which pages exist. */
@@ -23,7 +18,4 @@ export enum PageTypes {
 export const ButtonToPage = new Map([
   [NavigationButtons.HOME, PageTypes.HOME],
   [NavigationButtons.PROFILE, PageTypes.PROFILE],
-  [NavigationButtons.MATCH_PROFILE, PageTypes.MATCH_PROFILE],
-  [NavigationButtons.MATCH, PageTypes.MATCH],
-  [NavigationButtons.EVENT_DETAILS, PageTypes.EVENT_DETAILS],
 ])
