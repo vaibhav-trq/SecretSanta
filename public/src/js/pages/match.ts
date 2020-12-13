@@ -83,6 +83,10 @@ export class EventDetailsPage extends PageWithEventContext {
     $('#draw-names-button').on('click', async () => {
       await this.manager_.swapPage(PageTypes.MATCH, this.event_!);
     });
+    $('#rsvp').on('change', async (e) => {
+      const checked = $(e.target).prop('checked');
+      this.LOG("RSVP changed!", checked)
+    });
     $('#invite-link-button').on('click', async (e) => {
       const selBox = document.createElement('textarea');
       selBox.value = `${document.location.origin}/join/${this.event_!.key!}`;

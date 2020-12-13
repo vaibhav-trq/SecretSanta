@@ -27,5 +27,12 @@ template#event-details-content
       +rsvp_col("naughty", "hasn't rsvp'd")
       +rsvp_col("nice", "has rsvp'd")
     .col-12
+      | {{#is_host}}
       +chat_button('draw-names-button', 'Draw Names')
       +chat_button('invite-link-button', 'Invite Guests')
+      | {{/is_host}}
+      | {{^is_host}}
+      .custom-control.form-control-lg.custom-checkbox
+        input#rsvp.custom-control-input(type='checkbox')
+        label.custom-control-label(for='rsvp') I am attending
+      | {{/is_host}}
