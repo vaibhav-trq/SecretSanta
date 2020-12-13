@@ -18,7 +18,4 @@ export enum PageTypes {
 export const ButtonToPage = new Map([
   [NavigationButtons.HOME, PageTypes.HOME],
   [NavigationButtons.PROFILE, PageTypes.PROFILE],
-  [NavigationButtons.MATCH_PROFILE, PageTypes.MATCH_PROFILE],
-  [NavigationButtons.MATCH, PageTypes.MATCH],
-  [NavigationButtons.EVENT_DETAILS, PageTypes.EVENT_DETAILS],
 ])
