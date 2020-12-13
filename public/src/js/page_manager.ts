@@ -9,6 +9,7 @@ import { IPageManager, IPageManagerInternal } from "./models/page_manager.js";
 import { Logger } from "./models/logger.js";
 import { MatchProfilePage } from "./pages/match_profile.js";
 import { EventDetailsPage, MatchPage } from "./pages/match.js";
+import { InvitationPage } from "./pages/invitation.js";
 
 
 /**
@@ -20,13 +21,15 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
   private readonly pages_: Map<PageTypes, Page>;
   private readonly recaptchaVerifier_: firebase.default.auth.RecaptchaVerifier;
   private history_: PageTypes[] = [];
+  private base_page_: PageTypes;
 
-  constructor() {
+  constructor(pages: PageTypes[], base_page: PageTypes) {
     super();
     this.recaptchaVerifier_ = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
       size: 'invisible',
     });
-    this.pages_ = new Map(Object.values(PageTypes).map(k => {
+    this.base_page_ = base_page;
+    this.pages_ = new Map(pages.map(k => {
       return [k, this.createPageInstance(k)];
     }));
     this.registerButtons();
@@ -46,6 +49,8 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
         return new MatchPage(this);
       case PageTypes.EVENT_DETAILS:
         return new EventDetailsPage(this);
+      case PageTypes.INVITATION:
+        return new InvitationPage(this);
       default:
         throw new Error(`Unsupported PageType: ${page}`);
     }
@@ -56,9 +61,9 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
     await this.swapPage(PageTypes.LOGIN);
   }
 
-  async onLogin() {
+  async onLogin(context: any | undefined = undefined) {
     this.LOG('onLogin');
-    await this.swapPage(PageTypes.HOME);
+    await this.swapPage(this.base_page_, context);
   }
 
   async back() {
@@ -67,16 +72,18 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
     if (this.history_.length > 1) {
       await this.swapPage(this.history_[this.history_.length - 2]);
     } else {
-      await this.swapPage(PageTypes.HOME);
+      await this.swapPage(this.base_page_);
     }
   }
 
   private registerButtons() {
     ButtonToPage.forEach((page, button) => {
-      $(`#${button}-button`).on('click', async () => {
-        await this.swapPage(page);
-      });
-      this.LOG("Registered:", button, "=>", page);
+      if (this.pages_.has(page)) {
+        $(`#${button}-button`).on('click', async () => {
+          await this.swapPage(page);
+        });
+        this.LOG("Registered:", button, "=>", page);
+      }
     });
     $(`#${NavigationButtons.LOGOUT}-button`).on('click', async () => {
       await firebase.auth().signOut();
@@ -96,7 +103,7 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
       this.pages_.get(prev)!.onExit();
     }
 
-    if (target === PageTypes.HOME) {
+    if (target === this.base_page_) {
       this.history_ = [];
     } else {
       this.history_.push(target);

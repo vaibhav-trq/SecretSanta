@@ -3,8 +3,7 @@ const { firebase } = window;
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { IParticipant, SecretSantaEvent } from "../models/events.js";
-import { RenderTemplate } from "../common.js";
-import { AddMessage } from "../common.js";
+import { RenderTemplate, AddMessage } from "../common.js";
 
 interface IMatchContext extends IRenderData {
   match: {

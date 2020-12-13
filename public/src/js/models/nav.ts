@@ -13,6 +13,7 @@ export enum PageTypes {
   MATCH_PROFILE = 'match-profile',
   MATCH = 'match',
   EVENT_DETAILS = 'event-details',
+  INVITATION = 'invitation',
 };
 
 export const ButtonToPage = new Map([

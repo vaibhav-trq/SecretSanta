@@ -4,9 +4,9 @@
   "description": "",
   "scripts": {
     "lint": "eslint \"src/js/**/*\"",
-    "build": "tsc && pug ./src/index.pug --out ./dst/",
+    "build": "tsc && pug ./src/index.pug ./src/join.pug --out ./dst/",
     "watch_ts": "tsc -w",
-    "watch_pug": "pug ./src/index.pug --out ./dst/ -w"
+    "watch_pug": "pug ./src/index.pug ./src/join.pug --out ./dst/ -w"
   },
   "author": "",
   "license": "ISC",

@@ -1,4 +1,5 @@
 const { firebase } = window;
+import { PageTypes } from './models/nav.js';
 import { PageManager } from './page_manager.js';
 
 
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
   // Create page manager.
-  const manager = new PageManager();
+  const manager = new PageManager(Object.values(PageTypes), PageTypes.HOME);
 
   // Main entry point is based on firebase auth.
   firebase.auth().onAuthStateChanged(async user => {

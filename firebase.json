@@ -17,6 +17,7 @@
       "npm --prefix \"$RESOURCE_DIR/..\" install",
       "npm --prefix \"$RESOURCE_DIR/..\" run build"
     ],
+    "cleanUrls": true,
     "public": "public/dst",
     "ignore": [
       "firebase.json",
@@ -25,8 +26,12 @@
     ],
     "rewrites": [
       {
+        "source": "/join/*",
+        "destination": "/join.html"
+      },
+      {
         "source": "**",
-        "destination": "/dst/index.html"
+        "destination": "/index.html"
       }
     ],
     "headers": [
