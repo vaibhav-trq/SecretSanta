@@ -19,5 +19,6 @@ export interface IPageManager {
   onLogout(): Promise<void>;
 
   /** Called when a user logs in. */
+  onLogin(context: any): Promise<void>;
   onLogin(): Promise<void>;
 };
