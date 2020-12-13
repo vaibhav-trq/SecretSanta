@@ -8,10 +8,10 @@ mixin profile()
             img(src="{{user.photoURL}}{{^user.photoURL}}/assets/santa-hat.svg{{/user.photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
       .form-row
         .form-group.col-md-12
-            +formInput('displayName', 'First Last', '{{user.displayName}}')
+            +formInput('displayName', 'Santa Claus', '{{user.displayName}}')
       .form-row.align-items-center
         .form-group.col-md-6
-          +formInput('email', 'Email', '{{user.email}}', 'email')(readonly)
+          +formInput('email', 'santaclaus@gmail.com', '{{user.email}}', 'email')(readonly)
             span.badge
         .form-group.col-6.col-md-3
           +formInput('number', 'Phone Number', '', 'tel')
@@ -23,16 +23,43 @@ mixin profile()
     h3.text-center Address
     form#address-form
       .form-group
-        +formInput('street', '1234 Main St', '{{address.street}}')
+        +formInput('street', '1234 Elf Road', '{{address.street}}')
       .form-group
-        +formInput('street2', 'APT# 1234', '{{address.street2}}')
+        +formInput('street2', 'APT# Rudolph', '{{address.street2}}')
       .form-row
         .form-group.col-md-6
-          +formInput('city', 'City', '{{address.city}}')
+          +formInput('city', 'Santa Claus City', '{{address.city}}')
         .form-group.col-md-4
-          +formInput('state', 'State', '{{address.state}}')
+          +formInput('state', 'North Pole State', '{{address.state}}')
         .form-group.col-md-2
-          +formInput('zip', 'Zip Code', '{{address.street}}')(pattern="[0-9]*")
+          +formInput('zip', '88888', '{{address.street}}')(pattern="[0-9]*")
+    div.border-top.my-2.row.border-dark
+    h3.text-center My Favorites
+    form#favorites-form
+      label My favorite drinks are
+      .form-group
+          +formInput('drink', 'Peppermint Mochas, Bailey\'s + Hot Chocolate', '{{favorites.drink}}')
+      label My favorite savory snacks are
+      .form-group
+          +formInput('savory_snack', 'scooby snacks', '{{favorites.savory_snack}}')
+      label My favorite sweet snacks are
+      .form-group
+          +formInput('sweet_snack', 'Mrs. Claus\'s cookies', '{{favorites.savory_food}}')
+      label Clothing Sizes
+      .form-row
+        .form-group.col-md-6
+          +formInput('shirt_size', 'Shirt Size', '{{favorites.shirt_size}}')
+        .form-group.col-md-6
+          +formInput('shoe_size', 'Shoe/Sock Size', '{{favorites.shoe_size}}')
+      label I can never resist adding another one of these to my collection
+      .form-group
+          +formInput('more', 'ornaments', '{{favorites.more}}')
+      label I LOVE this, but never buy it for myself
+      .form-group
+          +formInput('love', 'reindeer', '{{favorites.love}}')
+      label But please, I really don't want more of
+      .form-group
+          +formInput('dont_want', 'lumps of coal', '{{favorites.dont_want}}')
 
 template#profile-content
   .col

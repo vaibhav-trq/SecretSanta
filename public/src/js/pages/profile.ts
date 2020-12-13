@@ -1,7 +1,7 @@
 const { firebase } = window;
 
 import { IRenderData, Page } from "../models/page.js";
-import { IUserAddress, IUserSettings, LoadUserData } from '../models/users.js';
+import { IUserAddress, IUserFavorites, IUserSettings, LoadUserData } from '../models/users.js';
 import { NavigationButtons, PageTypes } from "../models/nav.js";
 import { AddMessage, GetErrorMessage } from "../common.js";
 import { IPageManagerInternal } from "../models/page_manager.js";
@@ -10,6 +10,7 @@ import { intlTelInput } from "../models/intlTelInput.js";
 interface IProfileRenderData extends IRenderData {
   user: Object,
   address: IUserAddress,
+  favorites: IUserFavorites,
   settings: IUserSettings,
 };
 
@@ -39,7 +40,7 @@ export class ProfilePage extends Page {
   protected async pageData(): Promise<IRenderData> {
     const user = firebase.auth().currentUser!;
     const userData = await LoadUserData();
-    return { user: user.toJSON(), address: userData.address, settings: userData.settings };
+    return { user: user.toJSON(), address: userData.address, favorites: userData.favorites, settings: userData.settings };
   }
 
   protected async onRender(userData: IProfileRenderData) {
@@ -84,6 +85,11 @@ export class ProfilePage extends Page {
         await this.updateAddressData($(e.target));
       }
     });
+    $('#favorites-form input:not([readonly])').on('keypress', async (e) => {
+      if (e.key === "Enter") {
+        await this.updateFavoritesData($(e.target));
+      }
+    });
 
     $('.profile-close').on('click', async () => {
       await this.manager_.back();
@@ -125,6 +131,22 @@ export class ProfilePage extends Page {
       AddMessage(element, GetErrorMessage(e));
       const orig = await LoadUserData();
       element.val(orig.address[attr]);
+    }
+  }
+
+  private async updateFavoritesData(element: JQuery<HTMLElement>) {
+    const user = firebase.auth().currentUser!;
+    const ref = firebase.database().ref(`users/${user.uid}/favorites`);
+
+    const attr = element.attr('name')!;
+    const value = element.val()?.toString() || '';
+    try {
+      await ref.update({ [attr]: value });
+      AddMessage(element, 'Updated!', true);
+    } catch (e) {
+      AddMessage(element, GetErrorMessage(e));
+      const orig = await LoadUserData();
+      element.val(orig.favorites[attr]);
     }
   }
 

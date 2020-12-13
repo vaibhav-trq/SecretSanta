@@ -3,7 +3,7 @@ const { firebase } = window;
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 import { IParticipant, SecretSantaEvent } from "../models/events.js";
-import { RenderTemplate, AddMessage } from "../common.js";
+import { AddMessage, GetErrorMessage, RenderTemplate } from "../common.js";
 
 interface IMatchContext extends IRenderData {
   match: {
@@ -69,8 +69,17 @@ export class EventDetailsPage extends PageWithEventContext {
   protected readonly buttons_ = new Set<NavigationButtons>(Object.values(NavigationButtons));
   protected readonly participantsRef_ = firebase.database().ref('/participants');
 
+  protected async pageData(): Promise<SecretSantaEvent> {
+    return this.event_!;
+  }
+
   protected async onRender(renderData: IRenderData) {
     const participantsRef = this.participantsRef_.child(this.event_!.key!);
+    const user = firebase.auth().currentUser!;
+    const isAttending =
+      await participantsRef.child(`${user.uid}/rsvp/attending`).once('value');
+    $('#rsvp').prop("checked", isAttending.val());
+
     participantsRef.on('value', (snapshot) => {
       const no_rsvp = $("#naughty-participants .names");
       const yes_rsvp = $("#nice-participants .names");
@@ -89,6 +98,9 @@ export class EventDetailsPage extends PageWithEventContext {
     $('#draw-names-button').on('click', async () => {
       await this.manager_.swapPage(PageTypes.MATCH, this.event_!);
     });
+    $('#rsvp').on('change', async (e) => {
+      await this.updateRSVP($(e.target));
+    });
     $('#invite-link-button').on('click', async (e) => {
       const selBox = document.createElement('textarea');
       selBox.value = `${document.location.origin}/join/${this.event_!.key!}`;
@@ -100,4 +112,19 @@ export class EventDetailsPage extends PageWithEventContext {
       AddMessage($(e.target), "Invite link copied to clipboard", true);
     });
   }
+
+  private async updateRSVP(element: JQuery<HTMLElement>) {
+    const user = firebase.auth().currentUser!;
+    const rsvpRef = this.participantsRef_.child(`${this.event_!.key!}/${user.uid}/rsvp`);
+    const checked = element.prop('checked');
+
+    const message = checked ? "We'll see you there!" : "You'll be missed :(";
+    try {
+      await rsvpRef.update({ attending: checked });
+      AddMessage(element, message, true);
+    } catch (e) {
+      AddMessage(element, GetErrorMessage(e));
+      element.prop('checked', !checked);
+    }
+  };
 }

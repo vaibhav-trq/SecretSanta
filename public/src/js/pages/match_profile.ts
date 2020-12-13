@@ -1,7 +1,7 @@
 const { firebase } = window;
 
 import { IRenderData, Page } from "../models/page.js";
-import { IUserAddress, IUserSettings, LoadUserData } from '../models/users.js';
+import { IUserAddress, IUserFavorites, IUserSettings, LoadUserData } from '../models/users.js';
 import { NavigationButtons, PageTypes } from "../models/nav.js";
 import { IPageManagerInternal } from "../models/page_manager.js";
 import { intlTelInput } from "../models/intlTelInput.js";
@@ -9,6 +9,7 @@ import { intlTelInput } from "../models/intlTelInput.js";
 interface IMatchProfileRenderData extends IRenderData {
   user: Object,
   address: IUserAddress,
+  favorites: IUserFavorites,
   settings: IUserSettings,
 };
 
@@ -23,7 +24,7 @@ export class MatchProfilePage extends Page {
   protected async pageData(): Promise<IRenderData> {
     const user = firebase.auth().currentUser!;
     const userData = await LoadUserData();
-    return { user: user.toJSON(), address: userData.address, settings: userData.settings };
+    return { user: user.toJSON(), address: userData.address, favorites: userData.favorites, settings: userData.settings };
   }
 
   protected async onRender(matchData: IMatchProfileRenderData) {
