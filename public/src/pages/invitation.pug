@@ -1,5 +1,9 @@
 template#invitation-content
-  .col-12
-    | You're invited to {{name}} by {{host}} with {{num_participants}} so far!
-  .col-12
-    button#accept.btn.btn-primary(type="button") Accept
+  .wrapper
+    .mail
+      .cover
+        .letter
+          h3.text-center Tis the season!
+          text {{host}} invited you to {{name}}! Accept the invitation by {{match_date}} :)
+    .col-12
+      button#accept.btn.btn-primary(type="button") Accept
