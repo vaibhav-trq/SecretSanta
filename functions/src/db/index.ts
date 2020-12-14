@@ -3,11 +3,6 @@ import * as admin from 'firebase-admin';
 import { IEvent, IParticipant } from '../models/events';
 import { DataSnapshot } from 'firebase-functions/lib/providers/database';
 
-<<<<<<< HEAD
-const AddParticipant = async (eventId: string, participantUID: string, participant: IParticipant) => {
-  await admin.database().ref(`/participants/${eventId}/${participantUID}`).set(participant);
-  await admin.database().ref(`/events/${eventId}`).update({ num_participants: admin.database.ServerValue.increment(1) });
-=======
 export const AddParticipant = async (eventId: string, participantUID: string, participant: IParticipant) => {
   const { commited } = await admin.database().ref(`/participants/${eventId}/${participantUID}`).transaction((curr: IParticipant) => {
     if (curr) {
@@ -19,7 +14,6 @@ export const AddParticipant = async (eventId: string, participantUID: string, pa
   if (commited) {
     await admin.database().ref(`/events/${eventId}`).update({ num_participants: admin.database.ServerValue.increment(1) });
   }
->>>>>>> vaibhav-trq/issue49
 };
 
 export const OnEventCreated = (snapshot: DataSnapshot, context: EventContext) => {
