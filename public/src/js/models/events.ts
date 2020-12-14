@@ -1,5 +1,5 @@
 const { firebase } = window;
-import { HumanReadableDate } from "../common.js";
+import { HumanReadableDate, HumanRelativeTime } from "../common.js";
 
 export interface IParticipant {
   name: string,
@@ -62,6 +62,7 @@ export class SecretSantaEvent implements IEvent {
       this.updated_date = now.getTime();
       this.num_participants = 0;
       this.private = true;
+      this.match_date = now.setMonth(12);
     } else {
       this.key = hostIdOrKey;
       for (const [key, value] of Object.entries(content)) {
@@ -83,11 +84,11 @@ export class SecretSantaEvent implements IEvent {
     return `${this.num_participants} Santa Helper${ext}`;
   }
 
-  /** Updated date in human readable format. */
+  /** Updated date in human readable format - relative to current time. */
   public get formatted_updated_date() {
     const d = new Date();
     d.setTime(this.updated_date);
-    return HumanReadableDate(d);
+    return HumanRelativeTime(d);
   }
 
   public get host_name() {
@@ -99,10 +100,16 @@ export class SecretSantaEvent implements IEvent {
     }
   }
 
-  /** Created date in human readable format. */
+  /** Matched date in human readable format. */
+  public get formatted_matched_date() {
+    console.log("hello")
+    return HumanReadableDate(this.match_date!);
+  }
+
+  /** Created date in human readable format - relative to current time. */
   public get formatted_created_date() {
     const d = new Date();
     d.setTime(this.created_date);
-    return HumanReadableDate(d);
+    return HumanRelativeTime(d);
   }
 };
