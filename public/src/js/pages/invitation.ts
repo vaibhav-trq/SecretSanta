@@ -21,6 +21,7 @@ export class InvitationPage extends Page {
   }
 
   protected async onRender(renderData: IRenderData) {
+    console.log("hello")
     const user = firebase.auth().currentUser!;
     const userRsvpRef = firebase.database().ref(`/participants/${this.event_!.key!}/${user.uid}`);
 
@@ -33,6 +34,7 @@ export class InvitationPage extends Page {
     });
 
     $('button#accept').on('click', async (e) => {
+      //check login state here
       const name = user.displayName || user.uid;
       await JoinEvent({ eventId: this.event_!.key!, name });
     });

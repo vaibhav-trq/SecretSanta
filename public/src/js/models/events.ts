@@ -102,7 +102,6 @@ export class SecretSantaEvent implements IEvent {
 
   /** Matched date in human readable format. */
   public get formatted_matched_date() {
-    console.log("hello")
     return HumanReadableDate(this.match_date!);
   }
 
