@@ -60,7 +60,7 @@ export class SecretSantaEvent implements IEvent {
       this.event_host = user.displayName!;
       this.created_date = now.getTime();
       this.updated_date = now.getTime();
-      this.num_participants = 1;
+      this.num_participants = 0;
       this.private = true;
     } else {
       this.key = hostIdOrKey;
