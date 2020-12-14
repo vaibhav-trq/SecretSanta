@@ -14,7 +14,7 @@ export const OnJoinEvent = async (data: any, context: https.CallableContext) => 
   const participant: IParticipant = {
     name: data.name,
     rsvp: {
-      attending: false,
+      attending: true,
       invited_date: new Date().getTime(),
     },
   };
