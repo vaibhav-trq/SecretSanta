@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import { DataSnapshot } from 'firebase-functions/lib/providers/database';
 import { DbRoot } from './db';
 
-const AddParticipant = async (eventId: string, hostId: string, userId: string, userName: string) => {
+export const AddParticipant = async (eventId: string, hostId: string | null, userId: string, userName: string) => {
   const participant: SecretSanta.IParticipant = {
     name: userName,
     rsvp: {

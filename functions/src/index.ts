@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 admin.initializeApp(firebase.config().firebase);
 
 import { OnUserCreated, OnUserDeleted } from './auth';
-import { OnHelloWorld } from './http';
+import { OnHelloWorld, OnJoinEvent } from './http';
 import { OnEventCreated, OnUserRsvpChange } from './db';
 
 // Auth handlers.
@@ -16,3 +16,4 @@ export const updatedUserRSVP = firebase.database.ref('/users/{userId}/events/{ev
 
 // HTTP Handlers.
 export const helloWorld = firebase.https.onRequest(OnHelloWorld);
+export const joinEvent = firebase.https.onCall(OnJoinEvent);
