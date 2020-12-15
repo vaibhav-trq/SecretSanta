@@ -49,20 +49,7 @@ export const GetErrorMessage = (e: any): string => {
   return 'Unexepected error!';
 };
 
-export const HumanReadableDate = (matchDate: number): String => {
-  const setter = new Date();
-  setter.setTime(matchDate);
-  const formattedDate = setter.toLocaleDateString(
-    'en-us',
-    {
-      year: 'numeric',
-      day: 'numeric',
-      month: 'long',
-    });
-  return formattedDate;
-}
-
-export const HumanRelativeTime = (d: Date): String => {
+export const HumanReadableDate = (d: Date): String => {
   const today = new Date();
 
   // Make a fuzzy time
