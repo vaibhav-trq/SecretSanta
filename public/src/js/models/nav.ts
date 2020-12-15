@@ -14,6 +14,8 @@ export enum PageTypes {
   MATCH = 'match',
   EVENT_DETAILS = 'event-details',
   INVITATION = 'invitation',
+  ERROR_EVENT_404 = 'error-event-404',
+  ERROR_EVENT_ALREADY_JOINED = 'error-event-already-joined'
 };
 
 export const ButtonToPage = new Map([

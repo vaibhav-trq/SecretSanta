@@ -10,6 +10,7 @@ import { Logger } from "./models/logger.js";
 import { MatchProfilePage } from "./pages/match_profile.js";
 import { EventDetailsPage, MatchPage } from "./pages/match.js";
 import { InvitationPage } from "./pages/invitation.js";
+import { ErrorEvent404Page, ErrorEventAlreadyJoinedPage } from "./pages/error.js";
 
 
 /**
@@ -51,6 +52,10 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
         return new EventDetailsPage(this);
       case PageTypes.INVITATION:
         return new InvitationPage(this);
+      case PageTypes.ERROR_EVENT_404:
+        return new ErrorEvent404Page(this);
+      case PageTypes.ERROR_EVENT_ALREADY_JOINED:
+        return new ErrorEventAlreadyJoinedPage(this);
       default:
         throw new Error(`Unsupported PageType: ${page}`);
     }
@@ -108,7 +113,6 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
     } else {
       this.history_.push(target);
     }
-
     await next.render(context);
   }
 };

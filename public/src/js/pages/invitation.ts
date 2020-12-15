@@ -28,7 +28,10 @@ export class InvitationPage extends Page {
       const participant: IParticipant | undefined = snapshot.val();
       if (participant) {
         // Participant exists so redirect to main website.
-        window.location.href = "/";
+        this.manager_.swapPage(PageTypes.ERROR_EVENT_ALREADY_JOINED, this.event_)
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 4000);
       }
     });
 
