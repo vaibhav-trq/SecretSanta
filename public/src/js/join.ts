@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Assure that authorization is persistent for sessions, not a single tab.
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-  const manager = new PageManager([PageTypes.LOGIN, PageTypes.INVITATION], PageTypes.INVITATION);
+  const manager = new PageManager([PageTypes.INVITATION], PageTypes.INVITATION);
   const path = window.location.pathname.replace(/\/$/, '');
   const eventId = path.substr(path.lastIndexOf('/') + 1);
 
@@ -17,16 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (eventData.val()) {
     const event = new SecretSantaEvent(eventData.key!, eventData.val());
-    // Main entry point is based on firebase auth.
-    firebase.auth().onAuthStateChanged(async user => {
-      if (user) {
-        // Some user is logged in.
-        await manager.onLogin(event);
-      } else {
-        // No user is logged in.
-        await manager.onLogout();
-      }
-    });
+    await manager.swapPage(PageTypes.INVITATION, event);
   } else {
     // Redirect to home site.
     window.location.href = "/";
