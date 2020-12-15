@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         // Some user is logged in.
-        await manager.onLogin(event);
+        await manager.onLogin({ event, eventId });
       } else {
         // No user is logged in.
         await manager.onLogout();
