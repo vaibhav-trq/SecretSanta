@@ -28,36 +28,34 @@ export class InvitationPage extends Page {
       firebase.auth().onAuthStateChanged(async loggedInState => {
         if (loggedInState) {
           // Some user is logged in.
-          console.log("user is logged in!!")
           await manager.onLogin(this.event_);
-          const user = firebase.auth().currentUser!;
-          const userRsvpRef = firebase.database().ref(`/participants/${this.event_!.key!}/${user.uid}`);
-
-          userRsvpRef.on('value', (snapshot) => {
-            const participant: IParticipant | undefined = snapshot.val();
-            if (participant) {
-              console.log("participant exists - redirecting")
-              // Participant exists in the event so redirect to main website.
-              window.location.href = "/";
-            }
-            else {
-              console.log("logged in participant wants to join event")
-              const name = user.displayName || user.uid;
-              JoinEvent({ eventId: this.event_!.key!, name });
-            }
-          });
+          this.joinEventSafely();
 
         } else {
-          // No user is logged in.
-          //go to login in page
-          //check if the user is a participant in event
-          //v2: show a "you've already joined this webpage"
-          //direct to main website
-          //else direct to event details page
-          console.log("no user is logged in, go to the loginpage")
+          await manager.swapPage(PageTypes.LOGIN, this.event_);
+          this.joinEventSafely();
           //await manager.onLogout();
         }
       });
+    });
+  }
+
+  private joinEventSafely() {
+    const user = firebase.auth().currentUser!;
+    const userRsvpRef = firebase.database().ref(`/participants/${this.event_!.key!}/${user.uid}`);
+
+    userRsvpRef.on('value', (snapshot) => {
+      const participant: IParticipant | undefined = snapshot.val();
+      if (participant) {
+        console.log("participant exists - redirecting")
+        // Participant exists in the event so redirect to main website.
+        window.location.href = "/";
+      }
+      else {
+        console.log("logged in participant wants to join event")
+        const name = user.displayName || user.uid;
+        JoinEvent({ eventId: this.event_!.key!, name });
+      }
     });
   }
 };
