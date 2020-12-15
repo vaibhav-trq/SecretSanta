@@ -1,74 +1,71 @@
 const { firebase } = window;
+
 import { HumanReadableDate } from "../common.js";
 
-export interface IParticipant {
-  name: string,
-  rsvp: {
-    invited_date?: number,
-    attending: boolean,
-  },
+const GetNextXMas = () => {
+  const today = new Date();
+  const xmas = new Date(today.getFullYear(), 11, 25);
+  if (today.getMonth() === 11 && today.getDate() > 25) {
+    xmas.setFullYear(xmas.getFullYear() + 1);
+  }
+  return xmas;
 };
 
-/** A secret santa event object. */
-interface IEvent {
+const GetOrDefault = (item: SecretSanta.IEventMetadata | undefined, field: keyof SecretSanta.IEventMetadata, _default: any) => {
+  if (item) {
+    return item[field];
+  }
+  return _default;
+};
+
+const Month: { [idx: number]: string } = {
+  0: 'January',
+  1: 'February',
+  2: 'March',
+  3: 'April',
+  4: 'May',
+  5: 'June',
+  6: 'July',
+  7: 'August',
+  8: 'September',
+  9: 'October',
+  10: 'November',
+  11: 'December',
+};
+
+export class SecretSantaEvent implements SecretSanta.IEventMetadata {
   /** Event Name */
-  name: string,
-  /** Max number of attendees. */
-  limit: number,
+  name: string;
   /** Host UID. */
-  host: string,
+  host: string;
+  /** Max number of attendees. */
+  limit: number;
   /** Host Name */
   event_host: string;
   /** Time of creation. */
-  created_date: number,
+  created_date: number;
   /** Last update time. */
-  updated_date: number,
+  updated_date: number;
   /** Number of participants. */
-  num_participants: number,
-  /** Is the event invite only (invite via URL). */
-  private: boolean,
+  num_participants: number;
   /** Once true, no more guests can join the event. */
-  generated_matches: boolean,
-  /** Day matches are generated. After this time, no more people can join the secret santa. */
-  match_date?: number,
+  generated_matches: boolean;
   /** Day matches are revealed. */
-  end_date?: number,
-};
+  end_date: number;
 
-export class SecretSantaEvent implements IEvent {
-  name!: string;
-  limit!: number;
-  host!: string;
-  event_host!: string;
-  num_participants!: number;
-  private!: boolean;
-  generated_matches!: boolean;
-  created_date!: number;
-  updated_date!: number;
-  match_date?: number;
-  end_date?: number;
-  key?: string;
-
-  constructor(hostIdOrKey: string, content?: Object) {
+  constructor(hostId: string, content?: SecretSanta.IEventMetadata) {
     const user = firebase.auth().currentUser!;
-    if (!content) {
-      const now = new Date();
-      this.name = 'Secret Santa 2020';
-      this.limit = -1;
-      this.generated_matches = false;
-      this.host = hostIdOrKey;
-      this.event_host = user.displayName!;
-      this.created_date = now.getTime();
-      this.updated_date = now.getTime();
-      this.num_participants = 1;
-      this.private = true;
-    } else {
-      this.key = hostIdOrKey;
-      for (const [key, value] of Object.entries(content)) {
-        // @ts-expect-error
-        this[key] = value;
-      }
-    }
+    const now = new Date();
+
+    this.name = GetOrDefault(content, 'name', 'Secret Santa 2020');
+    this.limit = GetOrDefault(content, 'limit', -1);
+    this.generated_matches = GetOrDefault(content, 'generated_matches', false);
+    this.host = GetOrDefault(content, 'host', hostId);
+    this.event_host = GetOrDefault(content, 'event_host', user.displayName!);
+    this.created_date = GetOrDefault(content, 'created_date', now.getTime());
+    this.updated_date = GetOrDefault(content, 'updated_date', now.getTime());
+    this.num_participants = GetOrDefault(content, 'num_participants', 0);
+    this.end_date = GetOrDefault(content, 'end_date', GetNextXMas().getTime());
   }
 
   /** Check if user is event host */
@@ -81,6 +78,13 @@ export class SecretSantaEvent implements IEvent {
   public get participant_summary() {
     const ext = (this.num_participants > 1 ? 's' : '');
     return `${this.num_participants} Santa Helper${ext}`;
+  }
+
+  public get formatted_event_date() {
+    const d = new Date();
+    d.setTime(this.end_date);
+    const day = `${d.getDay()}`.padStart(2, '0')
+    return `${day}<br/>${Month[d.getMonth()]}`;
   }
 
   /** Updated date in human readable format. */

@@ -8,7 +8,8 @@ import { ButtonToPage, NavigationButtons, PageTypes } from "./models/nav.js";
 import { IPageManager, IPageManagerInternal } from "./models/page_manager.js";
 import { Logger } from "./models/logger.js";
 import { MatchProfilePage } from "./pages/match_profile.js";
-import { EventDetailsPage, MatchPage } from "./pages/match.js";
+import { MatchPage } from "./pages/match.js";
+import { EventDetailsPage } from "./pages/event_details.js";
 import { InvitationPage } from "./pages/invitation.js";
 
 
