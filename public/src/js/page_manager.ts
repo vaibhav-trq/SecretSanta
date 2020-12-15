@@ -11,6 +11,7 @@ import { MatchProfilePage } from "./pages/match_profile.js";
 import { MatchPage } from "./pages/match.js";
 import { EventDetailsPage } from "./pages/event_details.js";
 import { InvitationPage } from "./pages/invitation.js";
+import { ClearListeners } from "./models/db.js";
 
 
 /**
@@ -103,6 +104,7 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
       this.LOG('Swapping from:', prev);
       this.pages_.get(prev)!.onExit();
     }
+    ClearListeners();
 
     if (target === this.base_page_) {
       this.history_ = [];

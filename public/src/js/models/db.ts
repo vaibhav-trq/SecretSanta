@@ -4,6 +4,29 @@ type Properties<T> = NonNullable<
   { [K in keyof T]: K }[keyof T]
 >;
 
+const Listeners: Map<string, QueryBuilder<any>> = new Map();
+
+export const ClearListeners = () => {
+  Listeners.forEach(qb => {
+    qb.off();
+  });
+  Listeners.clear();
+}
+
+const DumpListeners = () => {
+  const date = new Date();
+  Listeners.forEach((q, k) => {
+    console.debug(date, 'Listener:', k);
+  });
+  setTimeout(DumpListeners, 3000);
+};
+
+/**
+ * Call this function to debug and remaining listeners.
+ * 
+ * DumpListeners();
+ */
+
 export class QueryBuilder<T> {
   ref: firebase.default.database.Reference;
 
@@ -24,6 +47,7 @@ export class QueryBuilder<T> {
     event: firebase.default.database.EventType,
     cb: (key: string, item: T) => void
   ) {
+    Listeners.set(this.ref.toString(), this);
     this.ref.on(event, (snapshot) => {
       cb(snapshot.key!, snapshot.val());
     });
@@ -35,6 +59,7 @@ export class QueryBuilder<T> {
     preLoop?: () => void,
     postLoop?: () => void
   ) {
+    Listeners.set(this.ref.toString(), this);
     this.ref.on(event, (snapshot) => {
       if (preLoop) preLoop();
       snapshot.forEach((d) => {
