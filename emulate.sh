@@ -4,10 +4,12 @@
 set -e
 
 # Build host.
+npm --prefix public install
 npm --prefix public run lint
 npm --prefix public run build
 
 # Build functions.
+npm --prefix functions install
 npm --prefix functions run lint
 npm --prefix functions run build
 
@@ -23,6 +25,9 @@ HOSTING_TS_PID=$!
 
 npm --prefix public run watch_pug &
 HOSTING_PUG_PID=$!
+
+npm --prefix functions run watch_ts &
+FUNCTIONS_TS_PID=$!
 
 trap 'kill $(jobs -p) && wait && echo Successfully exited' SIGINT SIGTERM EXIT
 

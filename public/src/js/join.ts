@@ -1,6 +1,6 @@
 const { firebase } = window;
 
-import { SecretSantaEvent } from "./models/events.js";
+import { DbRoot } from "./models/db.js";
 import { PageTypes } from "./models/nav.js";
 import { PageManager } from "./page_manager.js";
 
@@ -11,18 +11,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pages = [PageTypes.LOGIN, PageTypes.INVITATION, PageTypes.ERROR_EVENT_404, PageTypes.ERROR_EVENT_ALREADY_JOINED];
   const manager = new PageManager(pages, PageTypes.INVITATION);
   const path = window.location.pathname.replace(/\/$/, '');
-  const eventId = path.substr(path.lastIndexOf('/') + 1);
+  const eventQueryId = path.substr(path.lastIndexOf('/') + 1);
 
-  const eventRef = firebase.database().ref('/events');
-  const eventData = await eventRef.child(eventId).once('value');
+  const eventQuery = DbRoot.child('events').child(eventQueryId).child('metadata');
+  const [eventId, event] = await eventQuery.once();
 
-  if (eventData.val()) {
-    const event = new SecretSantaEvent(eventData.key!, eventData.val());
+  if (eventId) {
     // Main entry point is based on firebase auth.
     firebase.auth().onAuthStateChanged(async user => {
       if (user) {
         // Some user is logged in.
-        await manager.onLogin(event);
+        await manager.onLogin({ event, eventId });
       } else {
         // No user is logged in.
         await manager.onLogout();

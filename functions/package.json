@@ -2,6 +2,7 @@
   "name": "functions",
   "scripts": {
     "lint": "eslint \"src/**/*\"",
+    "watch_ts": "tsc -w",
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
+    "@types/secret-santa": "file:../common",
     "@typescript-eslint/eslint-plugin": "^3.9.1",
     "@typescript-eslint/parser": "^3.8.0",
     "eslint": "^7.6.0",

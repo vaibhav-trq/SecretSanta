@@ -14,7 +14,7 @@ template#event-participant
 template#event-details-content
   .event-modal-large.col-12.text-center.p-4
     .col-12
-      h1 {{end_date}}
+      h1 {{{formatted_event_date}}}
       h6 {{name}}
     .d-flex.flex-row
       +rsvp_col("naughty", "hasn't rsvp'd")

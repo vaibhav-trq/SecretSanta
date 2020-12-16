@@ -1,0 +1,6 @@
+{
+  "version": "1.0.5",
+  "name": "@types/secret-santa",
+  "private": true,
+  "typings": "main.d.ts"
+}
