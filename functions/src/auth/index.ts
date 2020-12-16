@@ -1,18 +1,12 @@
 import * as firebase from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import { createAddress, createFavorites, Settings } from '../models/users';
+import { UserProfile } from '../models/users';
+import { DbRoot } from '../db/db';
 
 export const OnUserCreated = async (user: admin.auth.UserRecord, context: firebase.EventContext) => {
-  firebase.logger.info("Users created!", { structuredData: true });
-  return admin.database().ref('/users/' + user.uid).set({
-    displayName: user.displayName,
-    address: createAddress(),
-    favorites: createFavorites(),
-    settings: new Settings(user.emailVerified, user.phoneNumber, user.email),
-  });
+  return await DbRoot.child('users').child(user.uid).child('profile').set(new UserProfile(user));
 };
 
-export const OnUserDeleted = (user: admin.auth.UserRecord, context: firebase.EventContext) => {
-  firebase.logger.info("Users deleted!", { structuredData: true });
-  return admin.database().ref('/users/' + user.uid).remove();
+export const OnUserDeleted = async (user: admin.auth.UserRecord, context: firebase.EventContext) => {
+  return await DbRoot.child('users').child(user.uid).remove();
 };

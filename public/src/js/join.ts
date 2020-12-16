@@ -1,6 +1,6 @@
 const { firebase } = window;
 
-import { SecretSantaEvent } from "./models/events.js";
+import { DbRoot } from "./models/db.js";
 import { PageTypes } from "./models/nav.js";
 import { PageManager } from "./page_manager.js";
 
@@ -10,14 +10,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const manager = new PageManager([PageTypes.INVITATION], PageTypes.INVITATION);
   const path = window.location.pathname.replace(/\/$/, '');
-  const eventId = path.substr(path.lastIndexOf('/') + 1);
+  const eventQueryId = path.substr(path.lastIndexOf('/') + 1);
 
-  const eventRef = firebase.database().ref('/events');
-  const eventData = await eventRef.child(eventId).once('value');
+  const eventQuery = DbRoot.child('events').child(eventQueryId).child('metadata');
+  const [eventId, event] = await eventQuery.once();
 
-  if (eventData.val()) {
-    const event = new SecretSantaEvent(eventData.key!, eventData.val());
-    await manager.swapPage(PageTypes.INVITATION, event);
+  if (event) {
+    firebase.auth().onAuthStateChanged(async user => {
+      await manager.swapPage(PageTypes.INVITATION, {
+        eventId,
+        event,
+      });
+    });
   } else {
     // Redirect to home site.
     window.location.href = "/";

@@ -1,18 +1,12 @@
 const { firebase } = window;
 
-import { IRenderData, Page } from "../models/page.js";
-import { IUserAddress, IUserFavorites, IUserSettings, LoadUserData } from '../models/users.js';
+import { Page } from "../models/page.js";
+import { LoadUserData } from '../models/users.js';
 import { NavigationButtons, PageTypes } from "../models/nav.js";
 import { AddMessage, GetErrorMessage } from "../common.js";
 import { IPageManagerInternal } from "../models/page_manager.js";
 import { intlTelInput } from "../models/intlTelInput.js";
-
-interface IProfileRenderData extends IRenderData {
-  user: Object,
-  address: IUserAddress,
-  favorites: IUserFavorites,
-  settings: IUserSettings,
-};
+import { DbRoot } from "../models/db.js";
 
 const GetOriginalValue = (attr: string): string => {
   const user = firebase.auth().currentUser!;
@@ -24,6 +18,17 @@ const GetOriginalValue = (attr: string): string => {
   }
   return '';
 };
+
+const isAddressAttribute = (attr: string): attr is keyof SecretSanta.IUserAddress => {
+  const valid = new Set<keyof SecretSanta.IUserAddress>(['street', 'street2', 'city', 'state', 'zip']);
+  // @ts-ignore
+  return valid.has(attr);
+}
+const isFavoriteAttribute = (attr: string): attr is keyof SecretSanta.IUserFavorites => {
+  const valid = new Set<keyof SecretSanta.IUserFavorites>(['dont_want', 'drink', 'food', 'love', 'savory_snack', 'shirt_size', 'shoe_size', 'sweet_snack']);
+  // @ts-ignore
+  return valid.has(attr);
+}
 
 export class ProfilePage extends Page {
   protected readonly prefix_ = PageTypes.PROFILE;
@@ -37,19 +42,17 @@ export class ProfilePage extends Page {
     this.recaptchaVerifier_ = recaptchaVerifier;
   }
 
-  protected async pageData(): Promise<IRenderData> {
-    const user = firebase.auth().currentUser!;
-    const userData = await LoadUserData();
-    return { user: user.toJSON(), address: userData.address, favorites: userData.favorites, settings: userData.settings };
+  protected async pageData(): Promise<SecretSanta.IUserProfile> {
+    return await LoadUserData();
   }
 
-  protected async onRender(userData: IProfileRenderData) {
+  protected async onRender(userData: SecretSanta.IUserProfile) {
     const user = firebase.auth().currentUser!;
 
     // Update the profile.
     if (user.phoneNumber) {
       $('#notifications').removeAttr('disabled');
-      if (userData.settings?.text_notifications) {
+      if (userData.settings.text_notifications) {
         $('#notifications').prop("checked", true);
       }
     }
@@ -82,12 +85,12 @@ export class ProfilePage extends Page {
     });
     $('#address-form input:not([readonly])').on('keypress', async (e) => {
       if (e.key === "Enter") {
-        await this.updateAddressData($(e.target));
+        await this.updateProfileData($(e.target));
       }
     });
     $('#favorites-form input:not([readonly])').on('keypress', async (e) => {
       if (e.key === "Enter") {
-        await this.updateFavoritesData($(e.target));
+        await this.updateProfileData($(e.target));
       }
     });
 
@@ -99,17 +102,17 @@ export class ProfilePage extends Page {
 
   private async updateTextNotification(element: JQuery<HTMLElement>) {
     const user = firebase.auth().currentUser!;
-    const ref = firebase.database().ref(`users/${user.uid}/settings`);
+    const updateQuery = DbRoot.child('users').child(user.uid).child('profile').child('settings').child('text_notifications');
     const checked = element.prop('checked');
     try {
       if (checked) {
         if (!user.phoneNumber) {
           return AddMessage(element, 'No phone number on record.');
         }
-        await ref.update({ text_notifications: user.phoneNumber });
+        await updateQuery.set(user.phoneNumber);
         AddMessage(element, 'Enabled text messages.', true);
       } else {
-        await ref.update({ text_notifications: null });
+        await updateQuery.set('');
         AddMessage(element, 'Disabled text messages.', true);
       }
     } catch (e) {
@@ -118,38 +121,28 @@ export class ProfilePage extends Page {
     }
   };
 
-  private async updateAddressData(element: JQuery<HTMLElement>) {
+  private async updateProfileData(element: JQuery<HTMLElement>) {
     const user = firebase.auth().currentUser!;
-    const ref = firebase.database().ref(`users/${user.uid}/address`);
 
     const attr = element.attr('name')!;
     const value = element.val()?.toString() || '';
+    if (!(isFavoriteAttribute(attr) || isAddressAttribute(attr))) {
+      return;
+    }
+
     try {
-      await ref.update({ [attr]: value });
+      if (isAddressAttribute(attr)) {
+        await DbRoot.child('users').child(user.uid).child('profile').child('address').child(attr).set(value);
+      } else {
+        await DbRoot.child('users').child(user.uid).child('profile').child('favorites').child(attr).set(value);
+      }
       AddMessage(element, 'Updated!', true);
     } catch (e) {
       AddMessage(element, GetErrorMessage(e));
       const orig = await LoadUserData();
-      element.val(orig.address[attr]);
+      element.val(isAddressAttribute(attr) ? orig.address[attr] : orig.favorites[attr])
     }
   }
-
-  private async updateFavoritesData(element: JQuery<HTMLElement>) {
-    const user = firebase.auth().currentUser!;
-    const ref = firebase.database().ref(`users/${user.uid}/favorites`);
-
-    const attr = element.attr('name')!;
-    const value = element.val()?.toString() || '';
-    try {
-      await ref.update({ [attr]: value });
-      AddMessage(element, 'Updated!', true);
-    } catch (e) {
-      AddMessage(element, GetErrorMessage(e));
-      const orig = await LoadUserData();
-      element.val(orig.favorites[attr]);
-    }
-  }
-
 
   private async updateUser(element: JQuery<HTMLElement>) {
     const user = firebase.auth().currentUser!;
