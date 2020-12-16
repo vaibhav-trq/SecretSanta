@@ -17,7 +17,7 @@ export class InvitationPage extends Page {
   protected async setContext(context: any | undefined) {
     this.ASSERT('event' in context && 'eventId' in context, "Invalid context");
     this.key_ = context.eventId;
-    this.event_ = context.event;
+    this.event_ = new SecretSantaEvent(context.event);
   }
 
   protected async pageData() {
@@ -63,6 +63,6 @@ export class InvitationPage extends Page {
       letter.addClass('readLetter');
       letter.addClass('letterOpen');
       letter.removeClass('letterClose');
-    }, 400);
+    }, 1000);
   }
 };

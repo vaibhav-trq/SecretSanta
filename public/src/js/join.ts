@@ -8,12 +8,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Assure that authorization is persistent for sessions, not a single tab.
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-  const manager = new PageManager([PageTypes.INVITATION], PageTypes.INVITATION);
+  const manager = new PageManager([PageTypes.INVITATION, PageTypes.LOGIN], PageTypes.INVITATION);
   const path = window.location.pathname.replace(/\/$/, '');
-  const eventQueryId = path.substr(path.lastIndexOf('/') + 1);
+  const eventId = path.substr(path.lastIndexOf('/') + 1);
 
-  const eventQuery = DbRoot.child('events').child(eventQueryId).child('metadata');
-  const [eventId, event] = await eventQuery.once();
+  const eventQuery = DbRoot.child('events').child(eventId).child('metadata');
+  const [, event] = await eventQuery.once();
 
   if (event) {
     firebase.auth().onAuthStateChanged(async user => {

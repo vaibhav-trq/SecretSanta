@@ -10,6 +10,6 @@ export const OnHelloWorld = (request: https.Request, response: express.Response)
 
 export const OnJoinEvent = async (data: any, context: https.CallableContext) => {
   const userId = context.auth!.uid;
-  // TODO: Validate the user is not already in the event.
+  // TODO: Validate the user is not already in the event and that the event exists.
   await AddParticipant(data.eventId, null, userId, data.name);
 };
