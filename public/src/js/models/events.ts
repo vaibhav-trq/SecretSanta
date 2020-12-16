@@ -54,14 +54,14 @@ export class SecretSantaEvent implements SecretSanta.IEventMetadata {
   end_date: number;
 
   constructor(hostId: string, content?: SecretSanta.IEventMetadata) {
-    const user = firebase.auth().currentUser!;
+    const user = firebase.auth().currentUser;
     const now = new Date();
 
     this.name = GetOrDefault(content, 'name', 'Secret Santa 2020');
     this.limit = GetOrDefault(content, 'limit', -1);
     this.generated_matches = GetOrDefault(content, 'generated_matches', false);
     this.host = GetOrDefault(content, 'host', hostId);
-    this.event_host = GetOrDefault(content, 'event_host', user.displayName!);
+    this.event_host = GetOrDefault(content, 'event_host', user?.displayName!);
     this.created_date = GetOrDefault(content, 'created_date', now.getTime());
     this.updated_date = GetOrDefault(content, 'updated_date', now.getTime());
     this.num_participants = GetOrDefault(content, 'num_participants', 0);
@@ -95,11 +95,11 @@ export class SecretSantaEvent implements SecretSanta.IEventMetadata {
   }
 
   public get host_name() {
-    const user = firebase.auth().currentUser!;
-    if (user.uid === this.host) {
+    const user = firebase.auth().currentUser;
+    if (user?.uid === this.host) {
       return 'You';
     } else {
-      return this.event_host;
+      return this.event_host || 'Someone';
     }
   }
 

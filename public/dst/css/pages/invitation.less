@@ -124,22 +124,25 @@
 }
 
 /*Classes to be Added and removed*/
+@animation-speed: 1s;
+@letter-animation-speed: 0.75s;
+
 .open {
-  animation: flipOpen .4s ease-in forwards;
+  animation: flipOpen @animation-speed ease-in forwards;
 }
 
 .close {
-  animation: flipClose .4s ease-in forwards;
+  animation: flipClose @animation-speed ease-in forwards;
 }
 
 .letterOpen {
   top: -80px;
-  transition: .3s ease-in;
+  transition: @letter-animation-speed ease-in;
 }
 
 .letterClose {
   top: 0px;
-  transition: .3s ease-in;
+  transition: @letter-animation-speed ease-in;
 }
 
 .readLetter {
