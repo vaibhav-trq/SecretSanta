@@ -5,13 +5,13 @@ mixin matchProfile()
     #match-profile-form
       .form-row.text-center
         .form-group.col-6.col-sm-4.col-md-3.mx-auto
-            img(src="{{user.photoURL}}{{^user.photoURL}}/assets/santa-hat.svg{{/user.photoURL}}").img-thumbnail.rounded.mx-auto.img-fluid
+            img(src="{{user.photoUrl}}{{^user.photoUrl}}/assets/santa-hat.svg{{/user.photoUrl}}").img-thumbnail.rounded.mx-auto.img-fluid
       .form-row
         .form-group.col-md-12
-            +formInput('displayName', 'Match First Last', '{{match.displayName}}')(readonly)
+            +formInput('displayName', 'Match First Last', '{{user.displayName}}')(readonly)
       .form-row.align-items-center
         .form-group.col-md-6
-          +formInput('email', 'Email', '{{match.email}}', 'email')(readonly)
+          +formInput('email', 'Email', '{{user.email}}', 'email')(readonly)
             span.badge
         .form-group.col-6.col-md-3
           +formInput('number', 'Phone Number', '', 'tel')(readonly)

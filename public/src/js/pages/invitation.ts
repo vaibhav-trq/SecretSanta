@@ -1,6 +1,7 @@
 const { firebase } = window;
 
-import { IParticipant, SecretSantaEvent } from "../models/events.js";
+import { DbRoot } from "../models/db.js";
+import { SecretSantaEvent } from "../models/events.js";
 import { PageTypes, NavigationButtons } from "../models/nav.js";
 import { IRenderData, Page } from "../models/page.js";
 
@@ -9,10 +10,12 @@ const JoinEvent = firebase.functions().httpsCallable('joinEvent');
 export class InvitationPage extends Page {
   protected readonly prefix_ = PageTypes.INVITATION;
   protected readonly buttons_ = new Set([NavigationButtons.LOGOUT]);
+  private key_: string | undefined;
   private event_: SecretSantaEvent | undefined;
 
   protected async setContext(context: any | undefined) {
-    this.ASSERT(context instanceof SecretSantaEvent, "Invalid context");
+    this.ASSERT('event' in context && 'eventId' in context, "Invalid context");
+
     this.event_ = context;
   }
 
@@ -22,11 +25,11 @@ export class InvitationPage extends Page {
 
   protected async onRender(renderData: IRenderData) {
     const user = firebase.auth().currentUser!;
-    const userRsvpRef = firebase.database().ref(`/participants/${this.event_!.key!}/${user.uid}`);
 
-    userRsvpRef.on('value', (snapshot) => {
-      const participant: IParticipant | undefined = snapshot.val();
-      if (participant) {
+    const myRsvpQuery = DbRoot.child('users').child(user.uid).child('events').child(this.key_!);
+
+    myRsvpQuery.onDirect('value', (key, item) => {
+      if (item) {
         // Participant exists so redirect to main website.
         window.location.href = "/";
       }
@@ -34,7 +37,7 @@ export class InvitationPage extends Page {
 
     $('button#accept').on('click', async (e) => {
       const name = user.displayName || user.uid;
-      await JoinEvent({ eventId: this.event_!.key!, name });
+      await JoinEvent({ eventId: this.key_!, name });
     });
     let flip = document.querySelector('.cover');
     let letter = document.querySelector('.letter');

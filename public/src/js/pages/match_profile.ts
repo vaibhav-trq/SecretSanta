@@ -1,17 +1,10 @@
 const { firebase } = window;
 
-import { IRenderData, Page } from "../models/page.js";
-import { IUserAddress, IUserFavorites, IUserSettings, LoadUserData } from '../models/users.js';
+import { Page } from "../models/page.js";
+import { LoadUserData } from '../models/users.js';
 import { NavigationButtons, PageTypes } from "../models/nav.js";
 import { IPageManagerInternal } from "../models/page_manager.js";
 import { intlTelInput } from "../models/intlTelInput.js";
-
-interface IMatchProfileRenderData extends IRenderData {
-  user: Object,
-  address: IUserAddress,
-  favorites: IUserFavorites,
-  settings: IUserSettings,
-};
 
 export class MatchProfilePage extends Page {
   protected readonly prefix_ = PageTypes.MATCH_PROFILE;
@@ -21,13 +14,12 @@ export class MatchProfilePage extends Page {
     super(manager);
   }
 
-  protected async pageData(): Promise<IRenderData> {
-    const user = firebase.auth().currentUser!;
-    const userData = await LoadUserData();
-    return { user: user.toJSON(), address: userData.address, favorites: userData.favorites, settings: userData.settings };
+  protected async pageData(): Promise<SecretSanta.IUserProfile> {
+    // TODO: Get the information about the match.
+    return await LoadUserData();
   }
 
-  protected async onRender(matchData: IMatchProfileRenderData) {
+  protected async onRender(matchData: SecretSanta.IUserProfile) {
     const user = firebase.auth().currentUser!;
 
     const ele = document.querySelector(`#${this.prefix_} [name="number"]`);

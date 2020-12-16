@@ -8,8 +8,10 @@ import { ButtonToPage, NavigationButtons, PageTypes } from "./models/nav.js";
 import { IPageManager, IPageManagerInternal } from "./models/page_manager.js";
 import { Logger } from "./models/logger.js";
 import { MatchProfilePage } from "./pages/match_profile.js";
-import { EventDetailsPage, MatchPage } from "./pages/match.js";
+import { MatchPage } from "./pages/match.js";
+import { EventDetailsPage } from "./pages/event_details.js";
 import { InvitationPage } from "./pages/invitation.js";
+import { ClearListeners } from "./models/db.js";
 
 
 /**
@@ -102,6 +104,7 @@ export class PageManager extends Logger implements IPageManager, IPageManagerInt
       this.LOG('Swapping from:', prev);
       this.pages_.get(prev)!.onExit();
     }
+    ClearListeners();
 
     if (target === this.base_page_) {
       this.history_ = [];
