@@ -23,13 +23,13 @@ export class MatchPage extends Page {
     // TODO: Remove default match.
     return match || {
       santa: { rid: "default" },
-      giftee: { name: "My Giftee's name", uid: "GifteeUID", rid: "default" },
+      giftee: { name: "My Giftee's name", uid: undefined, rid: "default" },
     };
   }
 
   protected async onRender(matchInfo: SecretSanta.IMatch) {
     $('#match-profile-button').on('click', async () => {
-      await this.manager_.swapPage(PageTypes.MATCH_PROFILE);
+      await this.manager_.swapPage(PageTypes.MATCH_PROFILE, matchInfo.giftee.uid);
     });
   }
 }

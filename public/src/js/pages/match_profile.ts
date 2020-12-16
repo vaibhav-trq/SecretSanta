@@ -9,14 +9,24 @@ import { intlTelInput } from "../models/intlTelInput.js";
 export class MatchProfilePage extends Page {
   protected readonly prefix_ = PageTypes.MATCH_PROFILE;
   protected readonly buttons_ = new Set(Object.values(NavigationButtons));
+  private uid_: string | undefined;
 
   constructor(manager: IPageManagerInternal) {
     super(manager);
   }
 
+  protected async setContext(context: any | undefined) {
+    if (context) {
+      this.ASSERT(typeof context === 'string', 'Invalid context.');
+      this.uid_ = context;
+    }
+    // TODO: Uncomment this line after draw names is implemented.
+    // this.ASSERT(typeof this.uid_ === 'string', 'Invalid uid.');
+  }
+
   protected async pageData(): Promise<SecretSanta.IUserProfile> {
     // TODO: Get the information about the match.
-    return await LoadUserData();
+    return await LoadUserData(this.uid_);
   }
 
   protected async onRender(matchData: SecretSanta.IUserProfile) {
