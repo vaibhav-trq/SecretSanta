@@ -8,23 +8,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Assure that authorization is persistent for sessions, not a single tab.
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-  const manager = new PageManager([PageTypes.LOGIN, PageTypes.INVITATION], PageTypes.INVITATION);
+  const manager = new PageManager([PageTypes.INVITATION, PageTypes.LOGIN], PageTypes.INVITATION);
   const path = window.location.pathname.replace(/\/$/, '');
-  const eventQueryId = path.substr(path.lastIndexOf('/') + 1);
+  const eventId = path.substr(path.lastIndexOf('/') + 1);
 
-  const eventQuery = DbRoot.child('events').child(eventQueryId).child('metadata');
-  const [eventId, event] = await eventQuery.once();
+  const eventQuery = DbRoot.child('events').child(eventId).child('metadata');
+  const [, event] = await eventQuery.once();
 
-  if (eventId) {
-    // Main entry point is based on firebase auth.
+  if (event) {
     firebase.auth().onAuthStateChanged(async user => {
-      if (user) {
-        // Some user is logged in.
-        await manager.onLogin({ event, eventId });
-      } else {
-        // No user is logged in.
-        await manager.onLogout();
-      }
+      await manager.swapPage(PageTypes.INVITATION, {
+        eventId,
+        event,
+      });
     });
   } else {
     // Redirect to home site.

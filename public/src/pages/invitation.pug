@@ -4,6 +4,8 @@ template#invitation-content
     .cover
     .letter
       h3.shining-title Tis the season!
-      text {{host}} invited you to {{name}}! Accept the invitation by {{match_date}} :)
+      text {{host_name}} invited you to {{name}}! Accept the invitation by 
+        h4.center
+          | {{{formatted_event_date}}}
   .col-12.text-center.m-2
     button#accept.btn.btn-primary.btn-lg.btn-shiny(type="button") Accept
