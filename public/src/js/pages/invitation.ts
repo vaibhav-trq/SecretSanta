@@ -36,5 +36,19 @@ export class InvitationPage extends Page {
       const name = user.displayName || user.uid;
       await JoinEvent({ eventId: this.event_!.key!, name });
     });
+    let flip = document.querySelector('.cover');
+    let letter = document.querySelector('.letter');
+
+    await this.OpenLetter(flip!, letter!);
+  }
+
+  protected async OpenLetter(flip: Element, letter: Element) {
+    flip.classList.add('open');
+    flip.classList.remove('close');
+    setTimeout(function () {
+      letter.classList.add('letterOpen');
+      letter.classList.remove('letterClose');
+      letter.classList.add('readLetter');
+    }, 400);
   }
 };
