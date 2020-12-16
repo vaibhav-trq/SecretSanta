@@ -30,7 +30,9 @@ const DumpListeners = () => {
 };
 
 /**
- * Strongly typed way of accessing firebase database.
+ * QueryBuilder<T>
+ * 
+ * Wrapper for strongly typed firebase database queries.
  */
 export class QueryBuilder<T> {
   ref: firebase.default.database.Reference;
