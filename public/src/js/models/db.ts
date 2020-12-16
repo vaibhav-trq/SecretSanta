@@ -6,6 +6,9 @@ type Properties<T> = NonNullable<
 
 const Listeners: Map<string, QueryBuilder<any>> = new Map();
 
+/**
+ * Clear any current listeners.
+ */
 export const ClearListeners = () => {
   Listeners.forEach(qb => {
     qb.off();
@@ -13,6 +16,11 @@ export const ClearListeners = () => {
   Listeners.clear();
 }
 
+/**
+ * Call this function to debug and remaining listeners.
+ * 
+ * DumpListeners();
+ */
 const DumpListeners = () => {
   const date = new Date();
   Listeners.forEach((q, k) => {
@@ -22,11 +30,8 @@ const DumpListeners = () => {
 };
 
 /**
- * Call this function to debug and remaining listeners.
- * 
- * DumpListeners();
+ * Strongly typed way of accessing firebase database.
  */
-
 export class QueryBuilder<T> {
   ref: firebase.default.database.Reference;
 
