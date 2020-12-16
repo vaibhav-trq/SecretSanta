@@ -45,13 +45,16 @@ export class EventDetailsPage extends Page {
     const no_rsvp = $("#naughty-participants");
     const yes_rsvp = $("#nice-participants");
     participantsQuery.on('value', (uid, participant) => {
+      this.LOG('Participant', participant);
       const targetDom = (participant.rsvp.attending ? yes_rsvp : no_rsvp).find('.names');
-      RenderTemplate("event-participant", targetDom, participant);
+      targetDom.append(RenderTemplate("event-participant", null, participant));
     }, () => {
+      this.LOG('Participant Start');
       $('.names').html('');
     }, () => {
       no_rsvp.find("h6 span").text(`(${no_rsvp.find('.names').children().length})`);
       $("#nice-participants h6 span").text(`(${yes_rsvp.find('.names').children().length})`);
+      this.LOG('Participant End');
     });
 
     $('#draw-names-button').on('click', async () => {

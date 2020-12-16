@@ -37,7 +37,10 @@ export class InvitationPage extends Page {
       const [, item] = await myRsvpQuery.once();
       if (item) {
         // Participant is already part of the event, so show different page.
-        this.manager_.swapPage(PageTypes.ERROR_EVENT_ALREADY_JOINED, this.event_)
+        setTimeout(async () => {
+          await this.manager_.swapPage(PageTypes.ERROR_EVENT_ALREADY_JOINED, this.event_)
+        }, 0);
+        return;
       }
 
       // On the second render auto join the event.

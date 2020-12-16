@@ -1,6 +1,6 @@
 import { SecretSantaEvent } from "../models/events.js";
 import { NavigationButtons, PageTypes } from "../models/nav.js";
-import { Page } from "../models/page.js";
+import { IRenderData, Page } from "../models/page.js";
 
 export class ErrorEvent404Page extends Page {
   protected readonly buttons_ = new Set([]);
@@ -19,5 +19,11 @@ export class ErrorEventAlreadyJoinedPage extends Page {
 
   protected async pageData() {
     return this.event_!;
+  }
+
+  protected async onRender(data: IRenderData) {
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 2000);
   }
 }
