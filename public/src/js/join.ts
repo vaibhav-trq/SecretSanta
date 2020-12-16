@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Assure that authorization is persistent for sessions, not a single tab.
   await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-  const manager = new PageManager([PageTypes.INVITATION, PageTypes.LOGIN], PageTypes.INVITATION);
+  const pages = [PageTypes.LOGIN, PageTypes.INVITATION, PageTypes.ERROR_EVENT_404, PageTypes.ERROR_EVENT_ALREADY_JOINED];
+  const manager = new PageManager(pages, PageTypes.INVITATION);
   const path = window.location.pathname.replace(/\/$/, '');
   const eventId = path.substr(path.lastIndexOf('/') + 1);
 
@@ -23,8 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
   } else {
-    // Redirect to home site.
-    window.location.href = "/";
+    await manager.swapPage(PageTypes.ERROR_EVENT_404);
   }
 });
 

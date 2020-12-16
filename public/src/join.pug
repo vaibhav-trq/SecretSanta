@@ -3,6 +3,8 @@ extends layout.pug
 block templates
   include pages/login
   include pages/invitation
+  include errors/error-event-404
+  include errors/error-event-already-joined
     
 block scripts
   script(type="module" src="/js/join.js")

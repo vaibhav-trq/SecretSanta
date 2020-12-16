@@ -24,27 +24,35 @@ export class InvitationPage extends Page {
     return this.event_!;
   }
 
+  protected async JoinEvent() {
+    const user = firebase.auth().currentUser!;
+    await JoinEvent({ eventId: this.key_!, name: user.displayName || user.uid });
+    window.location.href = "/";
+  }
+
   protected async onRender(renderData: IRenderData) {
     const user = firebase.auth().currentUser;
     if (user) {
       const myRsvpQuery = DbRoot.child('users').child(user.uid).child('events').child(this.key_!);
-      myRsvpQuery.on('value', (key, item) => {
-        if (item) {
-          // Participant is now a part of the event, so redirect.
-          window.location.href = "/";
-        }
-      });
+      const [, item] = await myRsvpQuery.once();
+      if (item) {
+        // Participant is already part of the event, so show different page.
+        setTimeout(async () => {
+          await this.manager_.swapPage(PageTypes.ERROR_EVENT_ALREADY_JOINED, this.event_)
+        }, 0);
+        return;
+      }
 
       // On the second render auto join the event.
       if (this.visited_) {
-        await JoinEvent({ eventId: this.key_!, name: user.displayName || user.uid });
+        await this.JoinEvent();
       }
     }
 
     $('button#accept').on('click', async (e) => {
       // Main entry point is based on firebase auth.
       if (user) {
-        await JoinEvent({ eventId: this.key_!, name: user.displayName || user.uid });
+        await this.JoinEvent();
       } else {
         await this.manager_.swapPage(PageTypes.LOGIN);
       }

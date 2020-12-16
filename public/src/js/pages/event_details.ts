@@ -46,7 +46,7 @@ export class EventDetailsPage extends Page {
     const yes_rsvp = $("#nice-participants");
     participantsQuery.on('value', (uid, participant) => {
       const targetDom = (participant.rsvp.attending ? yes_rsvp : no_rsvp).find('.names');
-      RenderTemplate("event-participant", targetDom, participant);
+      targetDom.append(RenderTemplate("event-participant", null, participant));
     }, () => {
       $('.names').html('');
     }, () => {
